@@ -335,6 +335,18 @@
             backdrop-filter: blur(10px);
         }
 
+        .lesson-indicator {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(255,255,255,0.8);
+            color: #666;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
         .card-number {
             position: absolute;
             top: 10px;
@@ -346,16 +358,34 @@
             font-size: 0.8rem;
         }
 
-        .lesson-indicator {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: rgba(255,255,255,0.8);
-            color: #666;
-            padding: 3px 8px;
-            border-radius: 10px;
-            font-size: 0.7rem;
-            font-weight: bold;
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            z-index: 1000;
+        }
+
+        .scroll-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-to-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+            background: linear-gradient(45deg, #764ba2, #667eea);
         }
 
         @media (max-width: 768px) {
@@ -410,6 +440,11 @@
     <div class="cards-container" id="cardsContainer">
         <!-- Cards will be added here by JavaScript -->
     </div>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-to-top" id="scrollToTopBtn" onclick="scrollToTop()">
+        ⬆️
+    </button>
 
     <script>
         const flashcards = [
@@ -592,45 +627,146 @@
                 result.textContent = '✅ Correct! Well done!';
                 result.className = 'quiz-result correct';
                 input.style.borderColor = '#48bb78';
+                input.style.color = '#48bb78';
+                input.style.fontWeight = 'bold';
                 
-                // Play word pronunciation followed by "Very Good!"
+                // Play celebration sound and "Excellent!" with British accent
                 if ('speechSynthesis' in window) {
-                    // First pronounce the word
-                    const wordUtterance = new SpeechSynthesisUtterance(flashcards[index].english);
-                    wordUtterance.lang = 'en-US';
-                    wordUtterance.rate = 0.8;
-                    wordUtterance.pitch = 1;
+                    // Create celebration sound effect
+                    playCelebrationSound();
                     
-                    // Then say "Very Good!" after the word
-                    wordUtterance.onend = function() {
-                        setTimeout(() => {
-                            const praiseUtterance = new SpeechSynthesisUtterance('Very good!');
-                            praiseUtterance.lang = 'en-US';
-                            praiseUtterance.rate = 0.9;
-                            praiseUtterance.pitch = 1.1;
-                            speechSynthesis.speak(praiseUtterance);
-                        }, 300); // Small delay between word and praise
-                    };
-                    
-                    speechSynthesis.speak(wordUtterance);
+                    // Say "Excellent!" after a short delay
+                    setTimeout(() => {
+                        const praiseUtterance = new SpeechSynthesisUtterance('Excellent!');
+                        praiseUtterance.lang = 'en-GB';
+                        praiseUtterance.rate = 0.8;
+                        praiseUtterance.pitch = 1.1;
+                        speechSynthesis.speak(praiseUtterance);
+                    }, 800); // Wait for celebration sound to play
                 }
             } else {
                 result.innerHTML = `❌ Incorrect. The correct answer is: <strong>${flashcards[index].english}</strong>`;
                 result.className = 'quiz-result incorrect';
                 input.style.borderColor = '#f56565';
+                input.style.color = '#f56565';
+                input.style.fontWeight = 'bold';
+                
+                // Play error sound - loud beep
+                if ('speechSynthesis' in window) {
+                    playErrorSound();
+                }
+            }
+        }
+
+        function playCelebrationSound() {
+            // Create celebratory sound effect with multiple tones
+            if (typeof AudioContext !== 'undefined' || typeof webkitAudioContext !== 'undefined') {
+                const audioContext = new (AudioContext || webkitAudioContext)();
+                
+                // Victory melody - ascending notes
+                const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+                
+                notes.forEach((frequency, index) => {
+                    setTimeout(() => {
+                        const oscillator = audioContext.createOscillator();
+                        const gainNode = audioContext.createGain();
+                        
+                        oscillator.connect(gainNode);
+                        gainNode.connect(audioContext.destination);
+                        
+                        oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+                        oscillator.type = 'sine';
+                        
+                        gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+                        gainNode.gain.linearRampToValueAtTime(0.4, audioContext.currentTime + 0.02);
+                        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                        
+                        oscillator.start(audioContext.currentTime);
+                        oscillator.stop(audioContext.currentTime + 0.3);
+                    }, index * 120);
+                });
+                
+                // Add some sparkle effect - higher pitched quick notes
+                setTimeout(() => {
+                    for (let i = 0; i < 6; i++) {
+                        setTimeout(() => {
+                            const sparkleOsc = audioContext.createOscillator();
+                            const sparkleGain = audioContext.createGain();
+                            
+                            sparkleOsc.connect(sparkleGain);
+                            sparkleGain.connect(audioContext.destination);
+                            
+                            sparkleOsc.frequency.setValueAtTime(1200 + (Math.random() * 800), audioContext.currentTime);
+                            sparkleOsc.type = 'sine';
+                            
+                            sparkleGain.gain.setValueAtTime(0, audioContext.currentTime);
+                            sparkleGain.gain.linearRampToValueAtTime(0.2, audioContext.currentTime + 0.01);
+                            sparkleGain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+                            
+                            sparkleOsc.start(audioContext.currentTime);
+                            sparkleOsc.stop(audioContext.currentTime + 0.1);
+                        }, i * 50);
+                    }
+                }, 480);
+            }
+        }
+
+        function playErrorSound() {
+            // Create loud error beep
+            if (typeof AudioContext !== 'undefined' || typeof webkitAudioContext !== 'undefined') {
+                const audioContext = new (AudioContext || webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.setValueAtTime(300, audioContext.currentTime);
+                oscillator.type = 'sawtooth';
+                
+                gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+                gainNode.gain.linearRampToValueAtTime(0.5, audioContext.currentTime + 0.05);
+                gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.3);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.3);
             }
         }
 
         function showAnswer(index) {
             const input = document.querySelector(`input[data-index="${index}"]`);
             const result = document.getElementById(`result-${index}`);
+            const showBtn = document.querySelector(`[onclick="showAnswer(${index})"]`);
             
-            input.value = flashcards[index].english;
-            result.innerHTML = `💡 Answer shown: <strong>${flashcards[index].english}</strong> - ${flashcards[index].translation}`;
-            result.className = 'quiz-result';
-            result.style.background = '#e6fffa';
-            result.style.color = '#234e52';
-            input.style.borderColor = '#4dd0e1';
+            if (showBtn.textContent.includes('Show Answer')) {
+                // Show the answer
+                input.value = flashcards[index].english;
+                result.innerHTML = `💡 Answer: <strong>${flashcards[index].english}</strong> - ${flashcards[index].translation}`;
+                result.className = 'quiz-result';
+                result.style.background = '#e6fffa';
+                result.style.color = '#234e52';
+                input.style.borderColor = '#4dd0e1';
+                input.style.color = '#4dd0e1';
+                input.style.fontWeight = 'bold';
+                
+                // Change button text to "Clear"
+                showBtn.innerHTML = '🗑️ Clear';
+                showBtn.style.background = 'linear-gradient(45deg, #718096, #a0aec0)';
+            } else {
+                // Clear the answer
+                input.value = '';
+                result.innerHTML = '';
+                result.className = 'quiz-result';
+                result.style.background = '';
+                result.style.color = '';
+                input.style.borderColor = '#e2e8f0';
+                input.style.color = '#333';
+                input.style.fontWeight = 'normal';
+                
+                // Change button text back to "Show Answer"
+                showBtn.innerHTML = '❌ Show Answer';
+                showBtn.style.background = 'linear-gradient(45deg, #f56565, #fc8181)';
+            }
         }
 
         function playAudio(event, word) {
@@ -638,7 +774,7 @@
             
             if ('speechSynthesis' in window) {
                 const utterance = new SpeechSynthesisUtterance(word);
-                utterance.lang = 'en-US';
+                utterance.lang = 'en-GB'; // British English
                 utterance.rate = 0.8;
                 utterance.pitch = 1;
                 speechSynthesis.speak(utterance);
@@ -718,7 +854,7 @@
                 
                 const card = visibleCards[currentIndex];
                 const utterance = new SpeechSynthesisUtterance(card.english);
-                utterance.lang = 'en-US';
+                utterance.lang = 'en-GB'; // British English
                 utterance.rate = 0.7;
                 utterance.pitch = 1;
                 
@@ -806,6 +942,24 @@
                     const index = parseInt(activeInput.dataset.index);
                     checkAnswer(index);
                 }
+            }
+        });
+
+        // Scroll to top functionality
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Show/hide scroll to top button based on scroll position
+        window.addEventListener('scroll', function() {
+            const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+            if (window.pageYOffset > 300) {
+                scrollToTopBtn.classList.add('visible');
+            } else {
+                scrollToTopBtn.classList.remove('visible');
             }
         });
 

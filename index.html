@@ -79,6 +79,21 @@
             background: linear-gradient(45deg, #fecfef, #ff9a9e);
         }
 
+        .voice-btn {
+            background: rgba(255,255,255,0.15);
+            border: 2px solid rgba(255,255,255,0.4);
+        }
+
+        .voice-btn:hover {
+            background: rgba(255,255,255,0.25);
+        }
+
+        .voice-btn.active {
+            background: rgba(255,255,255,0.35);
+            border-color: rgba(255,255,255,0.7);
+            box-shadow: 0 0 10px rgba(255,255,255,0.3);
+        }
+
         .cards-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -433,6 +448,11 @@
         <button class="btn" onclick="flipAllCards()">🔄 Flip All</button>
     </div>
 
+    <div class="controls">
+        <button class="btn voice-btn active" onclick="setVoice('american')" id="americanBtn">🇺🇸 American</button>
+        <button class="btn voice-btn" onclick="setVoice('british')" id="britishBtn">🇬🇧 British</button>
+    </div>
+
     <button class="play-all-btn" id="playAllBtn" onclick="togglePlayAll()">
         🎵 Play All Words
     </button>
@@ -492,6 +512,7 @@
         let currentFilter = 'all';
         let isPlayingAll = false;
         let isQuizMode = false;
+        let currentVoice = 'american'; // Default to American
 
         function createCards() {
             const container = document.getElementById('cardsContainer');
@@ -617,6 +638,19 @@
             });
         }
 
+        function setVoice(voice) {
+            currentVoice = voice;
+            
+            // Update button states
+            document.querySelectorAll('.voice-btn').forEach(btn => btn.classList.remove('active'));
+            
+            if (voice === 'american') {
+                document.getElementById('americanBtn').classList.add('active');
+            } else {
+                document.getElementById('britishBtn').classList.add('active');
+            }
+        }
+
         function checkAnswer(index) {
             const input = document.querySelector(`input[data-index="${index}"]`);
             const result = document.getElementById(`result-${index}`);
@@ -638,7 +672,7 @@
                     // Say "Excellent!" after a short delay
                     setTimeout(() => {
                         const praiseUtterance = new SpeechSynthesisUtterance('Excellent!');
-                        praiseUtterance.lang = 'en-GB';
+                        praiseUtterance.lang = currentVoice === 'british' ? 'en-GB' : 'en-US';
                         praiseUtterance.rate = 0.8;
                         praiseUtterance.pitch = 1.1;
                         speechSynthesis.speak(praiseUtterance);
@@ -774,7 +808,7 @@
             
             if ('speechSynthesis' in window) {
                 const utterance = new SpeechSynthesisUtterance(word);
-                utterance.lang = 'en-GB'; // British English
+                utterance.lang = currentVoice === 'british' ? 'en-GB' : 'en-US';
                 utterance.rate = 0.8;
                 utterance.pitch = 1;
                 speechSynthesis.speak(utterance);
@@ -854,7 +888,7 @@
                 
                 const card = visibleCards[currentIndex];
                 const utterance = new SpeechSynthesisUtterance(card.english);
-                utterance.lang = 'en-GB'; // British English
+                utterance.lang = currentVoice === 'british' ? 'en-GB' : 'en-US';
                 utterance.rate = 0.7;
                 utterance.pitch = 1;
                 

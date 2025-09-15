@@ -69,6 +69,16 @@
             border-color: rgba(255,255,255,0.6);
         }
 
+        .quiz-btn {
+            background: linear-gradient(45deg, #ff9a9e, #fecfef);
+            color: #333;
+            font-weight: bold;
+        }
+
+        .quiz-btn:hover {
+            background: linear-gradient(45deg, #fecfef, #ff9a9e);
+        }
+
         .cards-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -80,7 +90,7 @@
 
         .card {
             width: 100%;
-            height: 280px;
+            height: 320px;
             position: relative;
             transform-style: preserve-3d;
             transition: transform 0.6s ease;
@@ -176,12 +186,93 @@
             transform: scale(0.95);
         }
 
+        /* Quiz Mode Styles */
+        .quiz-face {
+            background: rgba(255,255,255,0.98);
+            padding: 15px;
+        }
+
+        .quiz-input {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            text-align: center;
+            outline: none;
+        }
+
+        .quiz-input:focus {
+            border-color: #4facfe;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        .quiz-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .check-btn {
+            flex: 1;
+            background: linear-gradient(45deg, #48bb78, #68d391);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .wrong-btn {
+            flex: 1;
+            background: linear-gradient(45deg, #f56565, #fc8181);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .quiz-result {
+            margin-top: 10px;
+            padding: 8px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .correct {
+            background: #c6f6d5;
+            color: #2f855a;
+        }
+
+        .incorrect {
+            background: #fed7d7;
+            color: #c53030;
+        }
+
+        /* Category specific styles */
         .card.verbs .card-face {
             border-left: 5px solid #4facfe;
         }
 
         .card.nouns .card-face {
             border-left: 5px solid #ff6b6b;
+        }
+
+        .card.classroom .card-face {
+            border-left: 5px solid #9f7aea;
+        }
+
+        .card.colors .card-face {
+            border-left: 5px solid #ed8936;
+        }
+
+        .card.shapes .card-face {
+            border-left: 5px solid #38b2ac;
         }
 
         .card.hidden {
@@ -208,6 +299,32 @@
             box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
         }
 
+        .stop-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e53);
+        }
+
+        .stop-btn:hover {
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        .word-letters {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #667eea;
+            margin: 10px 0;
+            text-align: center;
+            letter-spacing: 8px;
+            font-family: 'Courier New', monospace;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .word-divider {
+            width: 80%;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #667eea, transparent);
+            margin: 10px auto;
+        }
+
         .stats {
             background: rgba(255,255,255,0.1);
             color: white;
@@ -218,6 +335,29 @@
             backdrop-filter: blur(10px);
         }
 
+        .card-number {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.1);
+            color: #666;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+        }
+
+        .lesson-indicator {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(255,255,255,0.8);
+            color: #666;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
         @media (max-width: 768px) {
             .cards-container {
                 grid-template-columns: 1fr;
@@ -225,7 +365,7 @@
             }
             
             .card {
-                height: 250px;
+                height: 280px;
             }
             
             .header h1 {
@@ -240,35 +380,6 @@
                 font-size: 1.3rem;
             }
         }
-
-        @media (min-width: 768px) and (max-width: 1024px) {
-            .cards-container {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .cards-container {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        @media (min-width: 1400px) {
-            .cards-container {
-                grid-template-columns: repeat(4, 1fr);
-            }
-        }
-
-        .card-number {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(0,0,0,0.1);
-            color: #666;
-            padding: 3px 8px;
-            border-radius: 10px;
-            font-size: 0.8rem;
-        }
     </style>
 </head>
 <body>
@@ -278,17 +389,21 @@
     </div>
 
     <div class="stats" id="stats">
-        Total Words: 16 | Verbs: 13 | Nouns: 3
+        Total Words: 29 | Currently Showing: 29
     </div>
 
     <div class="controls">
         <button class="btn active" onclick="filterCards('all')">All Words</button>
-        <button class="btn" onclick="filterCards('verbs')">Verbs</button>
+        <button class="btn" onclick="filterCards('classroom')">Classroom Commands</button>
+        <button class="btn" onclick="filterCards('colors')">Colors</button>
+        <button class="btn" onclick="filterCards('shapes')">Shapes</button>
+        <button class="btn" onclick="filterCards('verbs')">Action Verbs</button>
         <button class="btn" onclick="filterCards('nouns')">Nouns</button>
-        <button class="btn" onclick="flipAllCards()">Flip All Cards</button>
+        <button class="btn quiz-btn" onclick="toggleQuizMode()">📝 Quiz Mode</button>
+        <button class="btn" onclick="flipAllCards()">🔄 Flip All</button>
     </div>
 
-    <button class="play-all-btn" onclick="playAllCards()">
+    <button class="play-all-btn" id="playAllBtn" onclick="togglePlayAll()">
         🎵 Play All Words
     </button>
 
@@ -298,26 +413,50 @@
 
     <script>
         const flashcards = [
-            { english: "kick", translation: "to hit with foot", type: "verb", category: "verbs", emoji: "🦵" },
-            { english: "run", translation: "to move quickly", type: "verb", category: "verbs", emoji: "🏃‍♂️" },
-            { english: "throw", translation: "to launch through air", type: "verb", category: "verbs", emoji: "🤾‍♂️" },
-            { english: "hear", translation: "to perceive sound", type: "verb", category: "verbs", emoji: "👂" },
-            { english: "eat", translation: "to consume food", type: "verb", category: "verbs", emoji: "🍽️" },
-            { english: "touch", translation: "to feel with hands", type: "verb", category: "verbs", emoji: "✋" },
-            { english: "sing", translation: "to make music vocally", type: "verb", category: "verbs", emoji: "🎤" },
-            { english: "read", translation: "to understand text", type: "verb", category: "verbs", emoji: "📖" },
-            { english: "swim", translation: "to move in water", type: "verb", category: "verbs", emoji: "🏊‍♂️" },
-            { english: "write", translation: "to create text", type: "verb", category: "verbs", emoji: "✍️" },
-            { english: "clean", translation: "to make tidy", type: "verb", category: "verbs", emoji: "🧽" },
-            { english: "draw", translation: "to create pictures", type: "verb", category: "verbs", emoji: "🎨" },
-            { english: "play", translation: "to have fun", type: "verb", category: "verbs", emoji: "🎮" },
-            { english: "hand", translation: "body part for grasping", type: "noun", category: "nouns", emoji: "✋" },
-            { english: "color", translation: "visual property", type: "noun", category: "nouns", emoji: "🌈" },
-            { english: "picture", translation: "visual image", type: "noun", category: "nouns", emoji: "🖼️" }
+            // Classroom Commands
+            { english: "close your book", translation: "اقفل كتابك", type: "command", category: "classroom", emoji: "📖", lesson: "Classroom" },
+            { english: "open", translation: "افتح", type: "verb", category: "classroom", emoji: "📂", lesson: "Classroom" },
+            { english: "sit down", translation: "اجلس", type: "command", category: "classroom", emoji: "💺", lesson: "Classroom" },
+            { english: "stand up", translation: "قف", type: "command", category: "classroom", emoji: "🧍", lesson: "Classroom" },
+            { english: "raise hand", translation: "ارفع يدك", type: "command", category: "classroom", emoji: "🙋", lesson: "Classroom" },
+            
+            // Colors
+            { english: "colors", translation: "ألوان", type: "noun", category: "colors", emoji: "🌈", lesson: "Colors" },
+            { english: "blue", translation: "أزرق", type: "adjective", category: "colors", emoji: "💙", lesson: "Colors" },
+            { english: "green", translation: "أخضر", type: "adjective", category: "colors", emoji: "💚", lesson: "Colors" },
+            { english: "red", translation: "أحمر", type: "adjective", category: "colors", emoji: "❤️", lesson: "Colors" },
+            { english: "yellow", translation: "أصفر", type: "adjective", category: "colors", emoji: "💛", lesson: "Colors" },
+            { english: "orange", translation: "برتقالي", type: "adjective", category: "colors", emoji: "🧡", lesson: "Colors" },
+            
+            // Shapes
+            { english: "shapes", translation: "أشكال", type: "noun", category: "shapes", emoji: "🔷", lesson: "Shapes" },
+            { english: "triangle", translation: "مثلث", type: "noun", category: "shapes", emoji: "🔺", lesson: "Shapes" },
+            { english: "square", translation: "مربع", type: "noun", category: "shapes", emoji: "⬜", lesson: "Shapes" },
+            { english: "circle", translation: "دائرة", type: "noun", category: "shapes", emoji: "⭕", lesson: "Shapes" },
+            
+            // Action Verbs (from original)
+            { english: "kick", translation: "يركل", type: "verb", category: "verbs", emoji: "🦵", lesson: "Actions" },
+            { english: "run", translation: "يجري", type: "verb", category: "verbs", emoji: "🏃‍♂️", lesson: "Actions" },
+            { english: "throw", translation: "يرمي", type: "verb", category: "verbs", emoji: "🤾‍♂️", lesson: "Actions" },
+            { english: "hear", translation: "يسمع", type: "verb", category: "verbs", emoji: "👂", lesson: "Actions" },
+            { english: "eat", translation: "يأكل", type: "verb", category: "verbs", emoji: "🍽️", lesson: "Actions" },
+            { english: "touch", translation: "يلمس", type: "verb", category: "verbs", emoji: "✋", lesson: "Actions" },
+            { english: "sing", translation: "يغني", type: "verb", category: "verbs", emoji: "🎤", lesson: "Actions" },
+            { english: "read", translation: "يقرأ", type: "verb", category: "verbs", emoji: "📖", lesson: "Actions" },
+            { english: "swim", translation: "يسبح", type: "verb", category: "verbs", emoji: "🏊‍♂️", lesson: "Actions" },
+            { english: "write", translation: "يكتب", type: "verb", category: "verbs", emoji: "✍️", lesson: "Actions" },
+            { english: "clean", translation: "ينظف", type: "verb", category: "verbs", emoji: "🧽", lesson: "Actions" },
+            { english: "draw", translation: "يرسم", type: "verb", category: "verbs", emoji: "🎨", lesson: "Actions" },
+            { english: "play", translation: "يلعب", type: "verb", category: "verbs", emoji: "🎮", lesson: "Actions" },
+            
+            // Nouns (from original)
+            { english: "hand", translation: "يد", type: "noun", category: "nouns", emoji: "✋", lesson: "Body" },
+            { english: "picture", translation: "صورة", type: "noun", category: "nouns", emoji: "🖼️", lesson: "Objects" }
         ];
 
         let currentFilter = 'all';
         let isPlayingAll = false;
+        let isQuizMode = false;
 
         function createCards() {
             const container = document.getElementById('cardsContainer');
@@ -329,40 +468,174 @@
                 cardElement.id = `card-${index}`;
                 cardElement.setAttribute('data-category', card.category);
                 
-                cardElement.innerHTML = `
-                    <div class="card-number">${index + 1}</div>
+                const isMultipleWords = card.english.includes(' ');
+                const letterDisplay = isMultipleWords ? '' : `
+                    <div class="word-divider"></div>
+                    <div class="word-letters">${card.english.toUpperCase().split('').join(' ')}</div>
+                `;
+                const letterDisplayBack = isMultipleWords ? '' : `
+                    <div class="word-divider"></div>
+                    <div class="word-letters" style="font-size: 1.4rem;">${card.english.toUpperCase().split('').join(' ')}</div>
+                `;
+
+                const normalFront = `
                     <div class="card-face card-front">
+                        <div class="lesson-indicator">${card.lesson}</div>
+                        <div class="card-number">${index + 1}</div>
                         <div class="card-image">${card.emoji}</div>
                         <div class="word-type">${card.type}</div>
                         <div class="word-english">${card.english}</div>
+                        ${letterDisplay}
                         <button class="audio-btn" onclick="playAudio(event, '${card.english}')">
                             🔊 Listen
                         </button>
                     </div>
+                `;
+
+                const normalBack = `
                     <div class="card-face card-back">
+                        <div class="lesson-indicator">${card.lesson}</div>
                         <div class="card-image">${card.emoji}</div>
                         <div class="word-english" style="font-size: 1.8rem;">${card.english}</div>
+                        ${letterDisplayBack}
                         <div class="word-translation">${card.translation}</div>
                         <button class="audio-btn" onclick="playAudio(event, '${card.english}')">
                             🔊 Listen Again
                         </button>
                     </div>
                 `;
+
+                const quizFront = `
+                    <div class="card-face quiz-face">
+                        <div class="lesson-indicator">${card.lesson}</div>
+                        <div class="card-number">${index + 1}</div>
+                        <div class="card-image">${card.emoji}</div>
+                        <button class="audio-btn" onclick="playAudio(event, '${card.english}')" style="margin-bottom: 15px;">
+                            🔊 Listen
+                        </button>
+                        <input type="text" class="quiz-input" placeholder="Type the English word..." data-answer="${card.english.toLowerCase()}" data-index="${index}">
+                        <div class="quiz-buttons">
+                            <button class="check-btn" onclick="checkAnswer(${index})">✓ Check</button>
+                            <button class="wrong-btn" onclick="showAnswer(${index})">❌ Show Answer</button>
+                        </div>
+                        <div class="quiz-result" id="result-${index}"></div>
+                    </div>
+                `;
+
+                cardElement.innerHTML = normalFront + normalBack;
                 
-                cardElement.addEventListener('click', function(e) {
-                    if (!e.target.classList.contains('audio-btn')) {
-                        this.classList.toggle('flipped');
-                    }
-                });
+                if (!isQuizMode) {
+                    cardElement.addEventListener('click', function(e) {
+                        if (!e.target.classList.contains('audio-btn')) {
+                            this.classList.toggle('flipped');
+                        }
+                    });
+                }
                 
                 container.appendChild(cardElement);
             });
         }
 
+        function toggleQuizMode() {
+            isQuizMode = !isQuizMode;
+            const quizBtn = document.querySelector('.quiz-btn');
+            
+            if (isQuizMode) {
+                quizBtn.textContent = '📚 Study Mode';
+                quizBtn.classList.add('active');
+                createQuizCards();
+            } else {
+                quizBtn.textContent = '📝 Quiz Mode';
+                quizBtn.classList.remove('active');
+                createCards();
+            }
+        }
+
+        function createQuizCards() {
+            const container = document.getElementById('cardsContainer');
+            container.innerHTML = '';
+            
+            flashcards.forEach((card, index) => {
+                const cardElement = document.createElement('div');
+                cardElement.className = `card ${card.category}`;
+                cardElement.id = `card-${index}`;
+                cardElement.setAttribute('data-category', card.category);
+                
+                cardElement.innerHTML = `
+                    <div class="card-face quiz-face">
+                        <div class="lesson-indicator">${card.lesson}</div>
+                        <div class="card-number">${index + 1}</div>
+                        <div class="card-image">${card.emoji}</div>
+                        <button class="audio-btn" onclick="playAudio(event, '${card.english}')" style="margin-bottom: 15px;">
+                            🔊 Listen
+                        </button>
+                        <input type="text" class="quiz-input" placeholder="Type the English word..." data-answer="${card.english.toLowerCase()}" data-index="${index}">
+                        <div class="quiz-buttons">
+                            <button class="check-btn" onclick="checkAnswer(${index})">✓ Check</button>
+                            <button class="wrong-btn" onclick="showAnswer(${index})">❌ Show Answer</button>
+                        </div>
+                        <div class="quiz-result" id="result-${index}"></div>
+                    </div>
+                `;
+                
+                container.appendChild(cardElement);
+            });
+        }
+
+        function checkAnswer(index) {
+            const input = document.querySelector(`input[data-index="${index}"]`);
+            const result = document.getElementById(`result-${index}`);
+            const userAnswer = input.value.toLowerCase().trim();
+            const correctAnswer = input.dataset.answer;
+            
+            if (userAnswer === correctAnswer) {
+                result.textContent = '✅ Correct! Well done!';
+                result.className = 'quiz-result correct';
+                input.style.borderColor = '#48bb78';
+                
+                // Play word pronunciation followed by "Very Good!"
+                if ('speechSynthesis' in window) {
+                    // First pronounce the word
+                    const wordUtterance = new SpeechSynthesisUtterance(flashcards[index].english);
+                    wordUtterance.lang = 'en-US';
+                    wordUtterance.rate = 0.8;
+                    wordUtterance.pitch = 1;
+                    
+                    // Then say "Very Good!" after the word
+                    wordUtterance.onend = function() {
+                        setTimeout(() => {
+                            const praiseUtterance = new SpeechSynthesisUtterance('Very good!');
+                            praiseUtterance.lang = 'en-US';
+                            praiseUtterance.rate = 0.9;
+                            praiseUtterance.pitch = 1.1;
+                            speechSynthesis.speak(praiseUtterance);
+                        }, 300); // Small delay between word and praise
+                    };
+                    
+                    speechSynthesis.speak(wordUtterance);
+                }
+            } else {
+                result.innerHTML = `❌ Incorrect. The correct answer is: <strong>${flashcards[index].english}</strong>`;
+                result.className = 'quiz-result incorrect';
+                input.style.borderColor = '#f56565';
+            }
+        }
+
+        function showAnswer(index) {
+            const input = document.querySelector(`input[data-index="${index}"]`);
+            const result = document.getElementById(`result-${index}`);
+            
+            input.value = flashcards[index].english;
+            result.innerHTML = `💡 Answer shown: <strong>${flashcards[index].english}</strong> - ${flashcards[index].translation}`;
+            result.className = 'quiz-result';
+            result.style.background = '#e6fffa';
+            result.style.color = '#234e52';
+            input.style.borderColor = '#4dd0e1';
+        }
+
         function playAudio(event, word) {
             event.stopPropagation();
             
-            // Use Web Speech API for pronunciation
             if ('speechSynthesis' in window) {
                 const utterance = new SpeechSynthesisUtterance(word);
                 utterance.lang = 'en-US';
@@ -375,8 +648,7 @@
         }
 
         function filterCards(category) {
-            // Update active button
-            document.querySelectorAll('.controls .btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.controls .btn:not(.quiz-btn)').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
             
             currentFilter = category;
@@ -397,18 +669,39 @@
         }
 
         function flipAllCards() {
+            if (isQuizMode) return;
             document.querySelectorAll('.card:not(.hidden)').forEach(card => {
                 card.classList.toggle('flipped');
             });
+        }
+
+        function togglePlayAll() {
+            if (isPlayingAll) {
+                stopPlayAll();
+            } else {
+                playAllCards();
+            }
+        }
+
+        function stopPlayAll() {
+            isPlayingAll = false;
+            speechSynthesis.cancel(); // Stop current speech
+            
+            const playBtn = document.getElementById('playAllBtn');
+            playBtn.innerHTML = '🎵 Play All Words';
+            playBtn.className = 'play-all-btn';
+            
+            // Reset card scales
+            document.querySelectorAll('.card').forEach(c => c.style.transform = '');
         }
 
         function playAllCards() {
             if (isPlayingAll) return;
             
             isPlayingAll = true;
-            const playBtn = document.querySelector('.play-all-btn');
-            playBtn.innerHTML = '⏸️ Playing...';
-            playBtn.style.opacity = '0.7';
+            const playBtn = document.getElementById('playAllBtn');
+            playBtn.innerHTML = '⏸️ Stop Playing';
+            playBtn.className = 'play-all-btn stop-btn';
             
             const visibleCards = flashcards.filter((card, index) => {
                 const cardElement = document.getElementById(`card-${index}`);
@@ -418,24 +711,29 @@
             let currentIndex = 0;
             
             function playNext() {
-                if (currentIndex >= visibleCards.length) {
-                    playBtn.innerHTML = '🎵 Play All Words';
-                    playBtn.style.opacity = '1';
-                    isPlayingAll = false;
-                    // Reset all card scales
-                    document.querySelectorAll('.card').forEach(c => c.style.transform = '');
+                if (currentIndex >= visibleCards.length || !isPlayingAll) {
+                    stopPlayAll();
                     return;
                 }
                 
                 const card = visibleCards[currentIndex];
                 const utterance = new SpeechSynthesisUtterance(card.english);
                 utterance.lang = 'en-US';
-                utterance.rate = 0.8;
+                utterance.rate = 0.7;
                 utterance.pitch = 1;
                 
                 utterance.onend = function() {
-                    currentIndex++;
-                    setTimeout(playNext, 1000); // Wait 1 second between words
+                    if (isPlayingAll) {
+                        currentIndex++;
+                        setTimeout(playNext, 1500); // Wait 1.5 seconds between words
+                    }
+                };
+                
+                utterance.onerror = function() {
+                    if (isPlayingAll) {
+                        currentIndex++;
+                        setTimeout(playNext, 1000);
+                    }
                 };
                 
                 speechSynthesis.speak(utterance);
@@ -453,43 +751,61 @@
                 playNext();
             } else {
                 alert('Browser does not support speech synthesis');
-                isPlayingAll = false;
-                playBtn.innerHTML = '🎵 Play All Words';
-                playBtn.style.opacity = '1';
+                stopPlayAll();
             }
         }
 
         function updateStats() {
             const total = flashcards.length;
-            const verbs = flashcards.filter(card => card.category === 'verbs').length;
-            const nouns = flashcards.filter(card => card.category === 'nouns').length;
+            let visibleCount = 0;
             
-            let visibleCount = total;
-            if (currentFilter === 'verbs') visibleCount = verbs;
-            if (currentFilter === 'nouns') visibleCount = nouns;
+            if (currentFilter === 'all') {
+                visibleCount = total;
+            } else {
+                visibleCount = flashcards.filter(card => card.category === currentFilter).length;
+            }
+            
+            const stats = {
+                classroom: flashcards.filter(card => card.category === 'classroom').length,
+                colors: flashcards.filter(card => card.category === 'colors').length,
+                shapes: flashcards.filter(card => card.category === 'shapes').length,
+                verbs: flashcards.filter(card => card.category === 'verbs').length,
+                nouns: flashcards.filter(card => card.category === 'nouns').length
+            };
             
             document.getElementById('stats').textContent = 
-                `Total Words: ${total} | Verbs: ${verbs} | Nouns: ${nouns} | Currently Showing: ${visibleCount}`;
+                `Total: ${total} | Classroom: ${stats.classroom} | Colors: ${stats.colors} | Shapes: ${stats.shapes} | Verbs: ${stats.verbs} | Nouns: ${stats.nouns} | Showing: ${visibleCount}`;
         }
 
         // Keyboard shortcuts
         document.addEventListener('keydown', function(event) {
+            if (isQuizMode) return;
+            
             switch(event.code) {
                 case 'KeyF':
                     flipAllCards();
                     break;
                 case 'KeyP':
-                    if (!isPlayingAll) playAllCards();
+                    togglePlayAll();
                     break;
-                case 'Digit1':
-                    filterCards('all');
+                case 'KeyQ':
+                    toggleQuizMode();
                     break;
-                case 'Digit2':
-                    filterCards('verbs');
+                case 'Space':
+                    event.preventDefault();
+                    togglePlayAll();
                     break;
-                case 'Digit3':
-                    filterCards('nouns');
-                    break;
+            }
+        });
+
+        // Allow Enter key to check answers in quiz mode
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' && isQuizMode) {
+                const activeInput = document.activeElement;
+                if (activeInput.classList.contains('quiz-input')) {
+                    const index = parseInt(activeInput.dataset.index);
+                    checkAnswer(index);
+                }
             }
         });
 

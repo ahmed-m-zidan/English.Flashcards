@@ -114,6 +114,17 @@
             border-color: rgba(255,255,255,0.6);
             box-shadow: 0 0 10px rgba(255,255,255,0.3);
         }
+
+        .btn-quiz-back {
+            background: var(--primary-end);
+            color: white;
+            border-color: var(--primary-end);
+        }
+
+        .btn-quiz-back:hover {
+            background: var(--primary-start);
+            border-color: var(--primary-start);
+        }
         
         .quiz-btn {
             background: linear-gradient(45deg, var(--quiz-start), var(--quiz-end));
@@ -261,11 +272,175 @@
         /* Notification Toast */
         .toast-notification { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: #333; color: white; padding: 15px 25px; border-radius: 10px; z-index: 2000; opacity: 0; visibility: hidden; transition: opacity 0.3s, top 0.3s, visibility 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
         .toast-notification.show { top: 40px; opacity: 1; visibility: visible; }
+        
+        /* New Quiz and Results Page Styles */
+        .hidden {
+            display: none !important;
+        }
+
+        .page-container {
+            width: 100%;
+            max-width: 900px;
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            color: #333;
+        }
+
+        .quiz-header, .results-header {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 2rem;
+            color: var(--primary-end);
+        }
+
+        .quiz-item {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .quiz-item:last-child {
+            border-bottom: none;
+        }
+
+        .quiz-item-emoji {
+            font-size: 3rem;
+            width: 60px;
+            text-align: center;
+            grid-row: 1 / 3;
+        }
+
+        .quiz-item-word {
+            font-size: 1.5rem;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 2px;
+            color: var(--primary-start);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 4px;
+            font-weight: bold; /* Make the word bold */
+        }
+        
+        .letter-placeholder {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 30px;
+            height: 40px;
+            border: 2px solid var(--primary-end);
+            border-radius: 5px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-start);
+            background-color: #fff;
+        }
+
+        .letter-choices {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .letter-btn {
+            width: 40px;
+            height: 40px;
+            font-size: 1.2rem;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            background-color: #fff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .letter-btn:disabled {
+            background-color: #e0e0e0;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .clear-selection-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--incorrect-start);
+        }
+
+        .finish-quiz-btn-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .results-summary {
+            text-align: center;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .results-summary strong {
+            font-size: 2rem;
+            color: var(--correct-start);
+        }
+
+        .results-section {
+            margin-top: 25px;
+        }
+
+        .results-section h3 {
+            font-size: 1.3rem;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+        }
+
+        .results-section.incorrect h3 {
+             border-bottom: 2px solid var(--incorrect-start);
+             color: var(--incorrect-start);
+        }
+
+        .results-section.correct h3 {
+            border-bottom: 2px solid var(--correct-start);
+            color: var(--correct-start);
+        }
+
+        .result-item {
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        .result-item .user-answer {
+            color: var(--incorrect-end);
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .result-item .correct-answer {
+            color: var(--correct-end);
+            font-weight: bold;
+        }
+
+        .results-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
 
         @media (max-width: 768px) {
             .cards-container { grid-template-columns: 1fr; gap: 15px; }
             .card { height: 280px; } .header h1 { font-size: 2rem; } .word-english { font-size: 1.8rem; }
             .word-translation { font-size: 1.3rem; } .controls { gap: 8px; } .btn { padding: 8px 14px; font-size: 0.8rem; }
+            .quiz-item { grid-template-columns: 1fr; text-align: center;}
+            .quiz-item-emoji { grid-row: 1; margin: 0 auto; }
+            .quiz-item-word { justify-content: center; }
+            .letter-choices { justify-content: center; }
         }
     </style>
 </head>
@@ -275,29 +450,38 @@
         <p>Your personalized English learning journey</p>
     </div>
 
-    <div class="stats" id="stats">Loading stats...</div>
-    
-    <div class="controls">
-        <div class="select-group">
-             <label for="categorySelect" style="color: white; padding: 5px;">Category:</label>
-             <select id="categorySelect"></select>
-             <label for="lessonSelect" style="color: white; padding: 5px;">Lesson:</label>
-             <select id="lessonSelect"></select>
+    <div id="mainControlsContainer">
+        <div class="stats" id="stats">Loading stats...</div>
+        
+        <div class="controls">
+            <div class="select-group">
+                <label for="categorySelect" style="color: white; padding: 5px;">Category:</label>
+                <select id="categorySelect"></select>
+                <label for="lessonSelect" style="color: white; padding: 5px;">Lesson:</label>
+                <select id="lessonSelect"></select>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button class="btn quiz-btn" onclick="toggleQuizMode()">📝 Listening Quiz</button>
+            <button class="btn quiz-btn" onclick="startSpellingQuiz()">✍️ Spelling Quiz</button>
+            <button class="btn" onclick="flipAllCards()">🔄 Flip All</button>
+            <button class="btn play-all-btn" id="playAllBtn" onclick="togglePlayAll()">🎵 Play All</button>
+        </div>
+
+        <div class="controls">
+            <button class="btn voice-btn active" onclick="setVoice('american')" id="americanBtn">🇺🇸 American</button>
+            <button class="btn voice-btn" onclick="setVoice('british')" id="britishBtn">🇬🇧 British</button>
         </div>
     </div>
     
-    <div class="controls">
-         <button class="btn quiz-btn" onclick="toggleQuizMode()">📝 Quiz Mode</button>
-         <button class="btn" onclick="flipAllCards()">🔄 Flip All</button>
-         <button class="btn play-all-btn" id="playAllBtn" onclick="togglePlayAll()">🎵 Play All</button>
+    <div id="mainPageContainer">
+        <div class="cards-container" id="cardsContainer"></div>
     </div>
 
-    <div class="controls">
-        <button class="btn voice-btn active" onclick="setVoice('american')" id="americanBtn">🇺🇸 American</button>
-        <button class="btn voice-btn" onclick="setVoice('british')" id="britishBtn">🇬🇧 British</button>
-    </div>
+    <div id="quizPageContainer" class="page-container hidden"></div>
 
-    <div class="cards-container" id="cardsContainer"></div>
+    <div id="resultsPageContainer" class="page-container hidden"></div>
     
     <div id="toast" class="toast-notification"></div>
 
@@ -374,6 +558,10 @@
         // --- App State and Elements ---
         const categorySelect = document.getElementById('categorySelect');
         const lessonSelect = document.getElementById('lessonSelect');
+        const mainControlsContainer = document.getElementById('mainControlsContainer');
+        const mainPageContainer = document.getElementById('mainPageContainer');
+        const quizPageContainer = document.getElementById('quizPageContainer');
+        const resultsPageContainer = document.getElementById('resultsPageContainer');
         
         // --- UI Initialization and Rendering ---
         function initializeAppUI() {
@@ -444,8 +632,9 @@
             categorySelect.addEventListener('change', populateLessons);
             lessonSelect.addEventListener('change', loadLesson);
             document.getElementById('cardsContainer').addEventListener('click', handleCardClick);
+            quizPageContainer.addEventListener('click', handleQuizInteraction);
         }
-
+        
         function handleCardClick(e) {
             const cardElement = e.target.closest('.card');
             if (!cardElement) return;
@@ -582,6 +771,196 @@
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
+
+        // --- New Spelling Quiz Functions ---
+
+        function handleQuizInteraction(e) {
+            const quizItem = e.target.closest('.quiz-item');
+            if (!quizItem) return;
+
+            if (e.target.matches('.letter-btn')) {
+                const letter = e.target.textContent;
+                const answerBoxes = quizItem.querySelectorAll('.letter-placeholder');
+                const firstEmptyBox = Array.from(answerBoxes).find(box => !box.textContent);
+                if (firstEmptyBox) {
+                    firstEmptyBox.textContent = letter;
+                    e.target.disabled = true;
+                }
+            } else if (e.target.matches('.clear-selection-btn')) {
+                quizItem.querySelectorAll('.letter-placeholder').forEach(box => box.textContent = '');
+                quizItem.querySelectorAll('.letter-btn').forEach(btn => btn.disabled = false);
+            }
+        }
+
+        window.startSpellingQuiz = function() {
+            mainPageContainer.classList.add('hidden');
+            mainControlsContainer.classList.add('hidden');
+            resultsPageContainer.classList.add('hidden');
+            quizPageContainer.classList.remove('hidden');
+            quizPageContainer.innerHTML = ''; // Clear previous quiz
+
+            const selectedLesson = lessonSelect.options[lessonSelect.selectedIndex].text;
+            let quizHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2 class="quiz-header" style="margin: 0; flex-grow: 1;">Spelling Quiz: ${selectedLesson}</h2>
+                    <button class="btn btn-quiz-back" onclick="backToMain()">Back</button>
+                </div>`;
+
+            currentFlashcards.forEach((card) => {
+                const { wordWithBlanksHTML, missingLetters } = createWordWithBlanks(card.english);
+                const choices = generateLetterChoices(missingLetters);
+                
+                quizHTML += `
+                    <div class="quiz-item" data-correct-letters="${missingLetters.sort().join('')}">
+                        <div class="quiz-item-emoji">${card.emoji}</div>
+                        <div class="quiz-item-word">${wordWithBlanksHTML}</div>
+                        <div class="letter-choices">
+                             ${choices.map(choice => `<button class="letter-btn">${choice}</button>`).join('')}
+                             <button class="clear-selection-btn">♻️</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            quizHTML += `
+                <div class="finish-quiz-btn-container">
+                    <button class="btn quiz-btn" onclick="finishQuiz()">Finish Quiz</button>
+                </div>
+            `;
+
+            quizPageContainer.innerHTML = quizHTML;
+        }
+
+        function createWordWithBlanks(word) {
+            let chars = word.split('');
+            let letterIndices = [];
+            chars.forEach((char, index) => {
+                if (char.match(/[a-zA-Z]/)) {
+                    letterIndices.push(index);
+                }
+            });
+
+            if (letterIndices.length < 2) {
+                 const html = chars.map(char => `<span>${char}</span>`).join('');
+                 return { wordWithBlanksHTML: html, missingLetters: [] };
+            }
+
+            const missingLetters = [];
+            let indicesToRemove = new Set();
+            while (indicesToRemove.size < 2) {
+                const randomIndex = letterIndices[Math.floor(Math.random() * letterIndices.length)];
+                indicesToRemove.add(randomIndex);
+            }
+            
+            // Store missing letters before replacing them
+            indicesToRemove.forEach(index => {
+                missingLetters.push(chars[index]);
+            });
+
+            let wordWithBlanksHTML = '';
+            chars.forEach((char, index) => {
+                if (indicesToRemove.has(index)) {
+                    wordWithBlanksHTML += `<span class="letter-placeholder"></span>`;
+                } else {
+                    wordWithBlanksHTML += `<span>${char === ' ' ? '&nbsp;' : char}</span>`;
+                }
+            });
+            
+            return { wordWithBlanksHTML, missingLetters };
+        }
+
+        function generateLetterChoices(missingLetters) {
+            const choices = new Set(missingLetters);
+            const alphabet = 'abcdefghijklmnopqrstuvwxyz';
+            while (choices.size < 5) {
+                const randomChar = alphabet[Math.floor(Math.random() * alphabet.length)];
+                choices.add(randomChar);
+            }
+            return Array.from(choices).sort(() => Math.random() - 0.5); // Shuffle
+        }
+
+
+        window.finishQuiz = function() {
+            const quizItems = quizPageContainer.querySelectorAll('.quiz-item');
+            let score = 0;
+            const correctAnswers = [];
+            const incorrectAnswers = [];
+
+            quizItems.forEach((item, index) => {
+                const correctLetters = item.dataset.correctLetters;
+                const selectedLetters = Array.from(item.querySelectorAll('.letter-placeholder')).map(box => box.textContent).sort().join('');
+                const originalCard = currentFlashcards[index];
+                
+                if (selectedLetters === correctLetters) {
+                    score++;
+                    correctAnswers.push(originalCard.english);
+                } else {
+                    incorrectAnswers.push({
+                        word: originalCard.english,
+                        userAnswer: Array.from(item.querySelectorAll('.letter-placeholder')).map(box => box.textContent || '_').join('')
+                    });
+                }
+            });
+
+            displayResults(score, correctAnswers, incorrectAnswers);
+        }
+
+        function displayResults(score, correctAnswers, incorrectAnswers) {
+            quizPageContainer.classList.add('hidden');
+            resultsPageContainer.classList.remove('hidden');
+            resultsPageContainer.innerHTML = '';
+
+            const totalQuestions = currentFlashcards.length;
+            let resultsHTML = `
+                <h2 class="results-header">Quiz Results</h2>
+                <div class="results-summary">
+                    Your score: <strong>${score} / ${totalQuestions}</strong>
+                </div>
+            `;
+
+            if (incorrectAnswers.length > 0) {
+                resultsHTML += `
+                    <div class="results-section incorrect">
+                        <h3>Incorrect Answers</h3>
+                        ${incorrectAnswers.map(item => `
+                            <div class="result-item">
+                               Correct word: <span class="correct-answer">${item.word}</span> | Your letters: <span class="user-answer">${item.userAnswer}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            if (correctAnswers.length > 0) {
+                resultsHTML += `
+                    <div class="results-section correct">
+                        <h3>Correct Answers</h3>
+                        ${correctAnswers.map(item => `<div class="result-item">✓ ${item}</div>`).join('')}
+                    </div>
+                `;
+            }
+
+            resultsHTML += `
+                <div class="results-buttons">
+                    <button class="btn btn-quiz-back" onclick="backToMain()">Back to Main</button>
+                    <button class="btn quiz-btn" onclick="retakeQuiz()">Retake Quiz</button>
+                </div>
+            `;
+
+            resultsPageContainer.innerHTML = resultsHTML;
+        }
+
+        window.backToMain = function() {
+            resultsPageContainer.classList.add('hidden');
+            quizPageContainer.classList.add('hidden');
+            mainPageContainer.classList.remove('hidden');
+            mainControlsContainer.classList.remove('hidden');
+        }
+
+        window.retakeQuiz = function() {
+            startSpellingQuiz();
+        }
+
 
         // Initialize App
         initializeAppUI();

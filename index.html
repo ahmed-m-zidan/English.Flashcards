@@ -1,10 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>English Audio Flashcards</title>
     <style>
+        :root {
+            --primary-start: #667eea;
+            --primary-end: #764ba2;
+            --accent-start: #ff6b6b;
+            --accent-end: #ff8e53;
+            --quiz-start: #ff9a9e;
+            --quiz-end: #fecfef;
+            --play-start: #4facfe;
+            --play-end: #00f2fe;
+            --correct-start: #48bb78;
+            --correct-end: #68d391;
+            --incorrect-start: #f56565;
+            --incorrect-end: #fc8181;
+            --new-color: #ffa500;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,7 +29,7 @@
 
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--primary-start) 0%, var(--primary-end) 100%);
             min-height: 100vh;
             padding: 20px;
             display: flex;
@@ -24,7 +40,7 @@
         .header {
             text-align: center;
             color: white;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         .header h1 {
@@ -40,20 +56,49 @@
 
         .controls {
             display: flex;
-            gap: 15px;
-            margin-bottom: 30px;
+            gap: 10px;
+            margin-bottom: 15px;
             flex-wrap: wrap;
             justify-content: center;
+            max-width: 1200px;
+        }
+        
+        .select-group {
+            display: flex;
+            gap: 10px;
+            background: rgba(255,255,255,0.2);
+            padding: 8px;
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
+        }
+
+        .select-group select {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 0.9rem;
+            padding: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .select-group select:focus {
+            outline: none;
+        }
+
+        .select-group select option {
+            background: var(--primary-end);
+            color: white;
         }
 
         .btn {
             background: rgba(255,255,255,0.2);
             color: white;
             border: 2px solid rgba(255,255,255,0.3);
-            padding: 12px 20px;
+            padding: 10px 18px;
             border-radius: 25px;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 0.9rem;
             transition: all 0.3s ease;
             backdrop-filter: blur(10px);
         }
@@ -67,31 +112,21 @@
         .btn.active {
             background: rgba(255,255,255,0.4);
             border-color: rgba(255,255,255,0.6);
+            box-shadow: 0 0 10px rgba(255,255,255,0.3);
         }
-
+        
         .quiz-btn {
-            background: linear-gradient(45deg, #ff9a9e, #fecfef);
+            background: linear-gradient(45deg, var(--quiz-start), var(--quiz-end));
             color: #333;
             font-weight: bold;
         }
 
-        .quiz-btn:hover {
-            background: linear-gradient(45deg, #fecfef, #ff9a9e);
+        .play-all-btn {
+            background: linear-gradient(45deg, var(--play-start), var(--play-end));
         }
 
-        .voice-btn {
-            background: rgba(255,255,255,0.15);
-            border: 2px solid rgba(255,255,255,0.4);
-        }
-
-        .voice-btn:hover {
-            background: rgba(255,255,255,0.25);
-        }
-
-        .voice-btn.active {
-            background: rgba(255,255,255,0.35);
-            border-color: rgba(255,255,255,0.7);
-            box-shadow: 0 0 10px rgba(255,255,255,0.3);
+        .stop-btn {
+            background: linear-gradient(45deg, var(--accent-start), var(--accent-end));
         }
 
         .cards-container {
@@ -108,7 +143,7 @@
             height: 320px;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 0.6s ease;
+            transition: transform 0.6s ease, opacity 0.5s ease;
             cursor: pointer;
         }
 
@@ -140,7 +175,7 @@
         .card-image {
             width: 80px;
             height: 80px;
-            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            background: linear-gradient(135deg, var(--accent-start), var(--play-start));
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -156,6 +191,7 @@
             color: #4a5568;
             margin-bottom: 10px;
             text-align: center;
+            direction: ltr;
         }
 
         .word-translation {
@@ -164,7 +200,6 @@
             margin-bottom: 15px;
             text-align: center;
             font-weight: 500;
-            font-style: italic;
         }
 
         .word-type {
@@ -179,17 +214,9 @@
         }
 
         .audio-btn {
-            background: linear-gradient(45deg, #ff6b6b, #ff8e53);
-            color: white;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            background: linear-gradient(45deg, var(--accent-start), var(--accent-end));
+            color: white; border: none; padding: 10px 16px; border-radius: 20px; cursor: pointer; font-size: 0.9rem;
+            transition: all 0.3s ease; display: flex; align-items: center; gap: 8px;
         }
 
         .audio-btn:hover {
@@ -197,255 +224,72 @@
             box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
         }
 
-        .audio-btn:active {
-            transform: scale(0.95);
-        }
-
         /* Quiz Mode Styles */
-        .quiz-face {
-            background: rgba(255,255,255,0.98);
-            padding: 15px;
-        }
+        .quiz-input { width: 100%; padding: 12px; margin: 15px 0; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 1.2rem; text-align: center; outline: none; }
+        .quiz-input:focus { border-color: var(--play-start); box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1); }
+        .quiz-buttons { display: flex; gap: 10px; margin-top: 10px; }
+        .check-btn { flex: 1; background: linear-gradient(45deg, var(--correct-start), var(--correct-end)); color: white; border: none; padding: 10px; border-radius: 15px; cursor: pointer; font-size: 0.9rem; }
+        .wrong-btn { flex: 1; background: linear-gradient(45deg, var(--incorrect-start), var(--incorrect-end)); color: white; border: none; padding: 10px; border-radius: 15px; cursor: pointer; font-size: 0.9rem; }
+        .quiz-result { margin-top: 10px; padding: 8px; border-radius: 10px; text-align: center; font-weight: bold; }
+        .correct { background: #c6f6d5; color: #2f855a; }
+        .incorrect { background: #fed7d7; color: #c53030; }
 
-        .quiz-input {
-            width: 100%;
-            padding: 12px;
-            margin: 15px 0;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            font-size: 1.2rem;
-            text-align: center;
-            outline: none;
-        }
-
-        .quiz-input:focus {
-            border-color: #4facfe;
-            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
-        }
-
-        .quiz-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .check-btn {
-            flex: 1;
-            background: linear-gradient(45deg, #48bb78, #68d391);
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 15px;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-
-        .wrong-btn {
-            flex: 1;
-            background: linear-gradient(45deg, #f56565, #fc8181);
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 15px;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-
-        .quiz-result {
-            margin-top: 10px;
-            padding: 8px;
-            border-radius: 10px;
-            text-align: center;
-            font-weight: bold;
-        }
-
-        .correct {
-            background: #c6f6d5;
-            color: #2f855a;
-        }
-
-        .incorrect {
-            background: #fed7d7;
-            color: #c53030;
-        }
-
-        /* Category specific styles */
-        .card.verbs .card-face {
-            border-left: 5px solid #4facfe;
-        }
-
-        .card.nouns .card-face {
-            border-left: 5px solid #ff6b6b;
-        }
-
-        .card.classroom .card-face {
-            border-left: 5px solid #9f7aea;
-        }
-
-        .card.colors .card-face {
-            border-left: 5px solid #ed8936;
-        }
-
-        .card.shapes .card-face {
-            border-left: 5px solid #38b2ac;
-        }
-
-        .card.hidden {
-            display: none;
-        }
-
-        .play-all-btn {
-            background: linear-gradient(45deg, #4facfe, #00f2fe);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 1.1rem;
-            margin: 20px 0;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .play-all-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
-        }
-
-        .stop-btn {
-            background: linear-gradient(45deg, #ff6b6b, #ff8e53);
-        }
-
-        .stop-btn:hover {
-            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
-        }
-
-        .word-letters {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #667eea;
-            margin: 10px 0;
-            text-align: center;
-            letter-spacing: 8px;
-            font-family: 'Courier New', monospace;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-        }
-
-        .word-divider {
-            width: 80%;
-            height: 2px;
-            background: linear-gradient(to right, transparent, #667eea, transparent);
-            margin: 10px auto;
-        }
+        .card.hidden { display: none; }
 
         .stats {
-            background: rgba(255,255,255,0.1);
-            color: white;
-            padding: 15px 25px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            text-align: center;
-            backdrop-filter: blur(10px);
-        }
-
-        .lesson-indicator {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: rgba(255,255,255,0.8);
-            color: #666;
-            padding: 3px 8px;
-            border-radius: 10px;
-            font-size: 0.7rem;
-            font-weight: bold;
+            background: rgba(255,255,255,0.1); color: white; padding: 15px 25px; border-radius: 15px; margin-bottom: 20px; text-align: center; backdrop-filter: blur(10px); font-size: 0.9rem;
         }
 
         .card-number {
+            position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.1); color: #666; padding: 3px 8px; border-radius: 10px; font-size: 0.8rem;
+        }
+        
+        .new-badge {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(0,0,0,0.1);
-            color: #666;
-            padding: 3px 8px;
-            border-radius: 10px;
-            font-size: 0.8rem;
-        }
-
-        .scroll-to-top {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            top: -10px;
+            right: -10px;
+            background: var(--new-color);
             color: white;
-            border: none;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 1.5rem;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-            transition: all 0.3s ease;
-            opacity: 0;
-            visibility: hidden;
-            z-index: 1000;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            transform: rotate(15deg);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
 
-        .scroll-to-top.visible {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .scroll-to-top:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-            background: linear-gradient(45deg, #764ba2, #667eea);
-        }
+        /* Notification Toast */
+        .toast-notification { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: #333; color: white; padding: 15px 25px; border-radius: 10px; z-index: 2000; opacity: 0; visibility: hidden; transition: opacity 0.3s, top 0.3s, visibility 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .toast-notification.show { top: 40px; opacity: 1; visibility: visible; }
 
         @media (max-width: 768px) {
-            .cards-container {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-            
-            .card {
-                height: 280px;
-            }
-            
-            .header h1 {
-                font-size: 2rem;
-            }
-            
-            .word-english {
-                font-size: 1.8rem;
-            }
-            
-            .word-translation {
-                font-size: 1.3rem;
-            }
+            .cards-container { grid-template-columns: 1fr; gap: 15px; }
+            .card { height: 280px; } .header h1 { font-size: 2rem; } .word-english { font-size: 1.8rem; }
+            .word-translation { font-size: 1.3rem; } .controls { gap: 8px; } .btn { padding: 8px 14px; font-size: 0.8rem; }
         }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>🎓 English Audio Flashcards</h1>
-        <p>Interactive flashcards to learn English with audio pronunciation</p>
+        <p>Your personalized English learning journey</p>
     </div>
 
-    <div class="stats" id="stats">
-        Total Words: 29 | Currently Showing: 29
-    </div>
-
+    <div class="stats" id="stats">Loading stats...</div>
+    
     <div class="controls">
-        <button class="btn active" onclick="filterCards('all')">All Words</button>
-        <button class="btn" onclick="filterCards('classroom')">Classroom Commands</button>
-        <button class="btn" onclick="filterCards('colors')">Colors</button>
-        <button class="btn" onclick="filterCards('shapes')">Shapes</button>
-        <button class="btn" onclick="filterCards('verbs')">Action Verbs</button>
-        <button class="btn" onclick="filterCards('nouns')">Nouns</button>
-        <button class="btn quiz-btn" onclick="toggleQuizMode()">📝 Quiz Mode</button>
-        <button class="btn" onclick="flipAllCards()">🔄 Flip All</button>
+        <div class="select-group">
+             <label for="categorySelect" style="color: white; padding: 5px;">Category:</label>
+             <select id="categorySelect"></select>
+             <label for="lessonSelect" style="color: white; padding: 5px;">Lesson:</label>
+             <select id="lessonSelect"></select>
+        </div>
+    </div>
+    
+    <div class="controls">
+         <button class="btn quiz-btn" onclick="toggleQuizMode()">📝 Quiz Mode</button>
+         <button class="btn" onclick="flipAllCards()">🔄 Flip All</button>
+         <button class="btn play-all-btn" id="playAllBtn" onclick="togglePlayAll()">🎵 Play All</button>
     </div>
 
     <div class="controls">
@@ -453,553 +297,296 @@
         <button class="btn voice-btn" onclick="setVoice('british')" id="britishBtn">🇬🇧 British</button>
     </div>
 
-    <button class="play-all-btn" id="playAllBtn" onclick="togglePlayAll()">
-        🎵 Play All Words
-    </button>
+    <div class="cards-container" id="cardsContainer"></div>
+    
+    <div id="toast" class="toast-notification"></div>
 
-    <div class="cards-container" id="cardsContainer">
-        <!-- Cards will be added here by JavaScript -->
-    </div>
+    <script type="module">
+        const wordSets = {
+            "General Vocabulary": {
+                "Classroom Commands": [
+                    { english: "close your book", translation: "اقفل كتابك", type: "command", emoji: "📖" },
+                    { english: "open", translation: "افتح", type: "verb", emoji: "📂" },
+                    { english: "sit down", translation: "اجلس", type: "command", emoji: "💺" },
+                    { english: "stand up", translation: "قف", type: "command", emoji: "🧍" },
+                    { english: "raise hand", translation: "ارفع يدك", type: "command", emoji: "🙋" },
+                ],
+                "Colors": [
+                    { english: "colors", translation: "ألوان", type: "noun", emoji: "🌈" },
+                    { english: "blue", translation: "أزرق", type: "adjective", emoji: "💙" },
+                    { english: "green", translation: "أخضر", type: "adjective", emoji: "💚" },
+                    { english: "red", translation: "أحمر", type: "adjective", emoji: "❤️" },
+                    { english: "yellow", translation: "أصفر", type: "adjective", emoji: "💛" },
+                    { english: "orange", translation: "برتقالي", type: "adjective", emoji: "🧡" },
+                ],
+                "Shapes": [
+                     { english: "shapes", translation: "أشكال", type: "noun", emoji: "🔷" },
+                     { english: "triangle", translation: "مثلث", type: "noun", emoji: "🔺" },
+                     { english: "square", translation: "مربع", type: "noun", emoji: "⬜" },
+                     { english: "circle", translation: "دائرة", type: "noun", emoji: "⭕" },
+                ],
+                "Action Verbs": [
+                    { english: "kick", translation: "يركل", type: "verb", emoji: "🦵" },
+                    { english: "run", translation: "يجري", type: "verb", emoji: "🏃‍♂️" },
+                    { english: "throw", translation: "يرمي", type: "verb", emoji: "🤾‍♂️" },
+                    { english: "hear", translation: "يسمع", type: "verb", emoji: "👂" },
+                    { english: "eat", translation: "يأكل", type: "verb", emoji: "🍽️" },
+                    { english: "touch", translation: "يلمس", type: "verb", emoji: "✋" },
+                    { english: "sing", translation: "يغني", type: "verb", emoji: "🎤" },
+                    { english: "read", translation: "يقرأ", type: "verb", emoji: "📖" },
+                    { english: "swim", translation: "يسبح", type: "verb", emoji: "🏊‍♂️" },
+                    { english: "write", translation: "يكتب", type: "verb", emoji: "✍️" },
+                    { english: "clean", translation: "ينظف", type: "verb", emoji: "🧽" },
+                    { english: "draw", translation: "يرسم", type: "verb", emoji: "🎨" },
+                    { english: "play", translation: "يلعب", type: "verb", emoji: "🎮" },
+                ],
+                "Nouns": [
+                    { english: "hand", translation: "يد", type: "noun", emoji: "✋" },
+                    { english: "picture", translation: "صورة", type: "noun", emoji: "🖼️" }
+                ]
+            },
+            "Our World - Book 1": {
+                "Unit 1: Fun in Class": [
+                    { english: "reading", translation: "قراءة", type: "verb", emoji: "📖", isNew: true },
+                    { english: "counting", translation: "عد", type: "verb", emoji: "🔢", isNew: true },
+                    { english: "colouring", translation: "تلوين", type: "verb", emoji: "🖍️", isNew: true },
+                    { english: "listening", translation: "استماع", type: "verb", emoji: "🎧", isNew: true },
+                    { english: "cutting", translation: "قص", type: "verb", emoji: "✂️", isNew: true },
+                    { english: "writing", translation: "كتابة", type: "verb", emoji: "✍️", isNew: true },
+                    { english: "drawing", translation: "رسم", type: "verb", emoji: "🎨", isNew: true },
+                    { english: "gluing", translation: "لصق", type: "verb", emoji: "🧴", isNew: true },
+                    { english: "talking", translation: "تحدث", type: "verb", emoji: "💬", isNew: true },
+                    { english: "rubbing out", translation: "محو", type: "verb", emoji: "🧼", isNew: true },
+                    { english: "glue", translation: "صمغ", type: "noun", emoji: "🧴", isNew: true },
+                    { english: "a notebook", translation: "دفتر", type: "noun", emoji: "📓", isNew: true },
+                    { english: "a felt tip", translation: "قلم فلوماستر", type: "noun", emoji: "🖊️", isNew: true },
+                    { english: "scissors", translation: "مقص", type: "noun", emoji: "✂️", isNew: true },
+                    { english: "a paintbrush", translation: "فرشاة رسم", type: "noun", emoji: "🖌️", isNew: true }
+                ]
+            }
+        };
 
-    <!-- Scroll to Top Button -->
-    <button class="scroll-to-top" id="scrollToTopBtn" onclick="scrollToTop()">
-        ⬆️
-    </button>
-
-    <script>
-        const flashcards = [
-            // Classroom Commands
-            { english: "close your book", translation: "اقفل كتابك", type: "command", category: "classroom", emoji: "📖", lesson: "Classroom" },
-            { english: "open", translation: "افتح", type: "verb", category: "classroom", emoji: "📂", lesson: "Classroom" },
-            { english: "sit down", translation: "اجلس", type: "command", category: "classroom", emoji: "💺", lesson: "Classroom" },
-            { english: "stand up", translation: "قف", type: "command", category: "classroom", emoji: "🧍", lesson: "Classroom" },
-            { english: "raise hand", translation: "ارفع يدك", type: "command", category: "classroom", emoji: "🙋", lesson: "Classroom" },
-            
-            // Colors
-            { english: "colors", translation: "ألوان", type: "noun", category: "colors", emoji: "🌈", lesson: "Colors" },
-            { english: "blue", translation: "أزرق", type: "adjective", category: "colors", emoji: "💙", lesson: "Colors" },
-            { english: "green", translation: "أخضر", type: "adjective", category: "colors", emoji: "💚", lesson: "Colors" },
-            { english: "red", translation: "أحمر", type: "adjective", category: "colors", emoji: "❤️", lesson: "Colors" },
-            { english: "yellow", translation: "أصفر", type: "adjective", category: "colors", emoji: "💛", lesson: "Colors" },
-            { english: "orange", translation: "برتقالي", type: "adjective", category: "colors", emoji: "🧡", lesson: "Colors" },
-            
-            // Shapes
-            { english: "shapes", translation: "أشكال", type: "noun", category: "shapes", emoji: "🔷", lesson: "Shapes" },
-            { english: "triangle", translation: "مثلث", type: "noun", category: "shapes", emoji: "🔺", lesson: "Shapes" },
-            { english: "square", translation: "مربع", type: "noun", category: "shapes", emoji: "⬜", lesson: "Shapes" },
-            { english: "circle", translation: "دائرة", type: "noun", category: "shapes", emoji: "⭕", lesson: "Shapes" },
-            
-            // Action Verbs (from original)
-            { english: "kick", translation: "يركل", type: "verb", category: "verbs", emoji: "🦵", lesson: "Actions" },
-            { english: "run", translation: "يجري", type: "verb", category: "verbs", emoji: "🏃‍♂️", lesson: "Actions" },
-            { english: "throw", translation: "يرمي", type: "verb", category: "verbs", emoji: "🤾‍♂️", lesson: "Actions" },
-            { english: "hear", translation: "يسمع", type: "verb", category: "verbs", emoji: "👂", lesson: "Actions" },
-            { english: "eat", translation: "يأكل", type: "verb", category: "verbs", emoji: "🍽️", lesson: "Actions" },
-            { english: "touch", translation: "يلمس", type: "verb", category: "verbs", emoji: "✋", lesson: "Actions" },
-            { english: "sing", translation: "يغني", type: "verb", category: "verbs", emoji: "🎤", lesson: "Actions" },
-            { english: "read", translation: "يقرأ", type: "verb", category: "verbs", emoji: "📖", lesson: "Actions" },
-            { english: "swim", translation: "يسبح", type: "verb", category: "verbs", emoji: "🏊‍♂️", lesson: "Actions" },
-            { english: "write", translation: "يكتب", type: "verb", category: "verbs", emoji: "✍️", lesson: "Actions" },
-            { english: "clean", translation: "ينظف", type: "verb", category: "verbs", emoji: "🧽", lesson: "Actions" },
-            { english: "draw", translation: "يرسم", type: "verb", category: "verbs", emoji: "🎨", lesson: "Actions" },
-            { english: "play", translation: "يلعب", type: "verb", category: "verbs", emoji: "🎮", lesson: "Actions" },
-            
-            // Nouns (from original)
-            { english: "hand", translation: "يد", type: "noun", category: "nouns", emoji: "✋", lesson: "Body" },
-            { english: "picture", translation: "صورة", type: "noun", category: "nouns", emoji: "🖼️", lesson: "Objects" }
-        ];
-
-        let currentFilter = 'all';
+        let currentFlashcards = [];
         let isPlayingAll = false;
         let isQuizMode = false;
-        let currentVoice = 'american'; // Default to American
+        let currentVoice = 'american';
+
+        // --- App State and Elements ---
+        const categorySelect = document.getElementById('categorySelect');
+        const lessonSelect = document.getElementById('lessonSelect');
+        
+        // --- UI Initialization and Rendering ---
+        function initializeAppUI() {
+            populateSelectors();
+            loadLesson();
+            setupEventListeners();
+        }
+
+        function renderUI() {
+            isQuizMode ? createQuizCards() : createCards();
+            updateStats();
+        }
 
         function createCards() {
             const container = document.getElementById('cardsContainer');
             container.innerHTML = '';
-            
-            flashcards.forEach((card, index) => {
+            currentFlashcards.forEach((card, index) => {
                 const cardElement = document.createElement('div');
-                cardElement.className = `card ${card.category}`;
-                cardElement.id = `card-${index}`;
-                cardElement.setAttribute('data-category', card.category);
+                cardElement.className = 'card';
+                cardElement.id = `card-${card.english.replace(/\s+/g, '-')}`;
                 
-                const isMultipleWords = card.english.includes(' ');
-                const letterDisplay = isMultipleWords ? '' : `
-                    <div class="word-divider"></div>
-                    <div class="word-letters">${card.english.toUpperCase().split('').join(' ')}</div>
-                `;
-                const letterDisplayBack = isMultipleWords ? '' : `
-                    <div class="word-divider"></div>
-                    <div class="word-letters" style="font-size: 1.4rem;">${card.english.toUpperCase().split('').join(' ')}</div>
-                `;
-
-                const normalFront = `
+                cardElement.innerHTML = `
                     <div class="card-face card-front">
-                        <div class="lesson-indicator">${card.lesson}</div>
+                        ${card.isNew ? '<div class="new-badge">New</div>' : ''}
                         <div class="card-number">${index + 1}</div>
                         <div class="card-image">${card.emoji}</div>
                         <div class="word-type">${card.type}</div>
                         <div class="word-english">${card.english}</div>
-                        ${letterDisplay}
-                        <button class="audio-btn" onclick="playAudio(event, '${card.english}')">
-                            🔊 Listen
-                        </button>
+                        <button class="audio-btn" data-word="${card.english}">🔊 Listen</button>
                     </div>
-                `;
-
-                const normalBack = `
                     <div class="card-face card-back">
-                        <div class="lesson-indicator">${card.lesson}</div>
                         <div class="card-image">${card.emoji}</div>
                         <div class="word-english" style="font-size: 1.8rem;">${card.english}</div>
-                        ${letterDisplayBack}
                         <div class="word-translation">${card.translation}</div>
-                        <button class="audio-btn" onclick="playAudio(event, '${card.english}')">
-                            🔊 Listen Again
-                        </button>
+                        <button class="audio-btn" data-word="${card.english}">🔊 Listen Again</button>
                     </div>
                 `;
-
-                const quizFront = `
-                    <div class="card-face quiz-face">
-                        <div class="lesson-indicator">${card.lesson}</div>
-                        <div class="card-number">${index + 1}</div>
-                        <div class="card-image">${card.emoji}</div>
-                        <button class="audio-btn" onclick="playAudio(event, '${card.english}')" style="margin-bottom: 15px;">
-                            🔊 Listen
-                        </button>
-                        <input type="text" class="quiz-input" placeholder="Type the English word..." data-answer="${card.english.toLowerCase()}" data-index="${index}">
-                        <div class="quiz-buttons">
-                            <button class="check-btn" onclick="checkAnswer(${index})">✓ Check</button>
-                            <button class="wrong-btn" onclick="showAnswer(${index})">❌ Show Answer</button>
-                        </div>
-                        <div class="quiz-result" id="result-${index}"></div>
-                    </div>
-                `;
-
-                cardElement.innerHTML = normalFront + normalBack;
-                
-                if (!isQuizMode) {
-                    cardElement.addEventListener('click', function(e) {
-                        if (!e.target.classList.contains('audio-btn')) {
-                            this.classList.toggle('flipped');
-                        }
-                    });
-                }
-                
                 container.appendChild(cardElement);
             });
         }
-
-        function toggleQuizMode() {
-            isQuizMode = !isQuizMode;
-            const quizBtn = document.querySelector('.quiz-btn');
-            
-            if (isQuizMode) {
-                quizBtn.textContent = '📚 Study Mode';
-                quizBtn.classList.add('active');
-                createQuizCards();
-            } else {
-                quizBtn.textContent = '📝 Quiz Mode';
-                quizBtn.classList.remove('active');
-                createCards();
-            }
-        }
-
+        
         function createQuizCards() {
-            const container = document.getElementById('cardsContainer');
-            container.innerHTML = '';
-            
-            flashcards.forEach((card, index) => {
-                const cardElement = document.createElement('div');
-                cardElement.className = `card ${card.category}`;
-                cardElement.id = `card-${index}`;
-                cardElement.setAttribute('data-category', card.category);
-                
-                cardElement.innerHTML = `
-                    <div class="card-face quiz-face">
-                        <div class="lesson-indicator">${card.lesson}</div>
-                        <div class="card-number">${index + 1}</div>
-                        <div class="card-image">${card.emoji}</div>
-                        <button class="audio-btn" onclick="playAudio(event, '${card.english}')" style="margin-bottom: 15px;">
-                            🔊 Listen
-                        </button>
-                        <input type="text" class="quiz-input" placeholder="Type the English word..." data-answer="${card.english.toLowerCase()}" data-index="${index}">
-                        <div class="quiz-buttons">
-                            <button class="check-btn" onclick="checkAnswer(${index})">✓ Check</button>
-                            <button class="wrong-btn" onclick="showAnswer(${index})">❌ Show Answer</button>
-                        </div>
-                        <div class="quiz-result" id="result-${index}"></div>
-                    </div>
-                `;
-                
-                container.appendChild(cardElement);
-            });
+             const container = document.getElementById('cardsContainer');
+             container.innerHTML = '';
+             currentFlashcards.forEach((card, index) => {
+                 const cardElement = document.createElement('div');
+                 cardElement.className = 'card';
+                 cardElement.id = `card-${card.english.replace(/\s+/g, '-')}`;
+                 cardElement.innerHTML = `
+                     <div class="card-face quiz-face">
+                         <div class="card-number">${index + 1}</div>
+                         <div class="card-image">${card.emoji}</div>
+                         <button class="audio-btn" data-word="${card.english}" style="margin-bottom: 15px;">🔊 Listen</button>
+                         <input type="text" class="quiz-input" placeholder="Type the English word..." data-answer="${card.english.toLowerCase()}" data-index="${index}" dir="ltr">
+                         <div class="quiz-buttons">
+                            <button class="check-btn" data-index="${index}">✓ Check</button>
+                            <button class="wrong-btn" data-index="${index}">❌ Show Answer</button>
+                         </div>
+                         <div class="quiz-result" id="result-${index}"></div>
+                     </div>
+                 `;
+                 container.appendChild(cardElement);
+             });
+        }
+        
+        // --- Event Handling & UI Logic ---
+        function setupEventListeners() {
+            categorySelect.addEventListener('change', populateLessons);
+            lessonSelect.addEventListener('change', loadLesson);
+            document.getElementById('cardsContainer').addEventListener('click', handleCardClick);
         }
 
-        function setVoice(voice) {
-            currentVoice = voice;
-            
-            // Update button states
-            document.querySelectorAll('.voice-btn').forEach(btn => btn.classList.remove('active'));
-            
-            if (voice === 'american') {
-                document.getElementById('americanBtn').classList.add('active');
-            } else {
-                document.getElementById('britishBtn').classList.add('active');
+        function handleCardClick(e) {
+            const cardElement = e.target.closest('.card');
+            if (!cardElement) return;
+
+            if (e.target.matches('.audio-btn')) {
+                e.stopPropagation(); playAudio(e.target.dataset.word); return;
             }
-        }
-
-        function checkAnswer(index) {
-            const input = document.querySelector(`input[data-index="${index}"]`);
-            const result = document.getElementById(`result-${index}`);
-            const userAnswer = input.value.toLowerCase().trim();
-            const correctAnswer = input.dataset.answer;
-            
-            if (userAnswer === correctAnswer) {
-                result.textContent = '✅ Correct! Well done!';
-                result.className = 'quiz-result correct';
-                input.style.borderColor = '#48bb78';
-                input.style.color = '#48bb78';
-                input.style.fontWeight = 'bold';
-                
-                // Play celebration sound and "Excellent!" with British accent
-                if ('speechSynthesis' in window) {
-                    // Create celebration sound effect
-                    playCelebrationSound();
-                    
-                    // Say "Excellent!" after a short delay
-                    setTimeout(() => {
-                        const praiseUtterance = new SpeechSynthesisUtterance('Excellent!');
-                        praiseUtterance.lang = currentVoice === 'british' ? 'en-GB' : 'en-US';
-                        praiseUtterance.rate = 0.8;
-                        praiseUtterance.pitch = 1.1;
-                        speechSynthesis.speak(praiseUtterance);
-                    }, 800); // Wait for celebration sound to play
-                }
-            } else {
-                result.innerHTML = `❌ Incorrect. The correct answer is: <strong>${flashcards[index].english}</strong>`;
-                result.className = 'quiz-result incorrect';
-                input.style.borderColor = '#f56565';
-                input.style.color = '#f56565';
-                input.style.fontWeight = 'bold';
-                
-                // Play error sound - loud beep
-                if ('speechSynthesis' in window) {
-                    playErrorSound();
-                }
+            if (isQuizMode) {
+                const index = e.target.dataset.index;
+                if (e.target.matches('.check-btn')) checkAnswer(index);
+                else if (e.target.matches('.wrong-btn')) showAnswer(index);
+                return;
             }
+            if (!isQuizMode) cardElement.classList.toggle('flipped');
         }
 
-        function playCelebrationSound() {
-            // Create celebratory sound effect with multiple tones
-            if (typeof AudioContext !== 'undefined' || typeof webkitAudioContext !== 'undefined') {
-                const audioContext = new (AudioContext || webkitAudioContext)();
-                
-                // Victory melody - ascending notes
-                const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
-                
-                notes.forEach((frequency, index) => {
-                    setTimeout(() => {
-                        const oscillator = audioContext.createOscillator();
-                        const gainNode = audioContext.createGain();
-                        
-                        oscillator.connect(gainNode);
-                        gainNode.connect(audioContext.destination);
-                        
-                        oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
-                        oscillator.type = 'sine';
-                        
-                        gainNode.gain.setValueAtTime(0, audioContext.currentTime);
-                        gainNode.gain.linearRampToValueAtTime(0.4, audioContext.currentTime + 0.02);
-                        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
-                        
-                        oscillator.start(audioContext.currentTime);
-                        oscillator.stop(audioContext.currentTime + 0.3);
-                    }, index * 120);
-                });
-                
-                // Add some sparkle effect - higher pitched quick notes
-                setTimeout(() => {
-                    for (let i = 0; i < 6; i++) {
-                        setTimeout(() => {
-                            const sparkleOsc = audioContext.createOscillator();
-                            const sparkleGain = audioContext.createGain();
-                            
-                            sparkleOsc.connect(sparkleGain);
-                            sparkleGain.connect(audioContext.destination);
-                            
-                            sparkleOsc.frequency.setValueAtTime(1200 + (Math.random() * 800), audioContext.currentTime);
-                            sparkleOsc.type = 'sine';
-                            
-                            sparkleGain.gain.setValueAtTime(0, audioContext.currentTime);
-                            sparkleGain.gain.linearRampToValueAtTime(0.2, audioContext.currentTime + 0.01);
-                            sparkleGain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
-                            
-                            sparkleOsc.start(audioContext.currentTime);
-                            sparkleOsc.stop(audioContext.currentTime + 0.1);
-                        }, i * 50);
-                    }
-                }, 480);
+        function populateSelectors() {
+            categorySelect.innerHTML = '';
+            for (const category in wordSets) {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                categorySelect.appendChild(option);
             }
+            populateLessons();
         }
 
-        function playErrorSound() {
-            // Create loud error beep
-            if (typeof AudioContext !== 'undefined' || typeof webkitAudioContext !== 'undefined') {
-                const audioContext = new (AudioContext || webkitAudioContext)();
-                const oscillator = audioContext.createOscillator();
-                const gainNode = audioContext.createGain();
-                
-                oscillator.connect(gainNode);
-                gainNode.connect(audioContext.destination);
-                
-                oscillator.frequency.setValueAtTime(300, audioContext.currentTime);
-                oscillator.type = 'sawtooth';
-                
-                gainNode.gain.setValueAtTime(0, audioContext.currentTime);
-                gainNode.gain.linearRampToValueAtTime(0.5, audioContext.currentTime + 0.05);
-                gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.3);
-                
-                oscillator.start(audioContext.currentTime);
-                oscillator.stop(audioContext.currentTime + 0.3);
+        function populateLessons() {
+            const selectedCategory = categorySelect.value;
+            lessonSelect.innerHTML = '';
+            for (const lesson in wordSets[selectedCategory]) {
+                const option = document.createElement('option');
+                option.value = lesson;
+                option.textContent = lesson;
+                lessonSelect.appendChild(option);
             }
+            loadLesson();
         }
 
-        function showAnswer(index) {
-            const input = document.querySelector(`input[data-index="${index}"]`);
-            const result = document.getElementById(`result-${index}`);
-            const showBtn = document.querySelector(`[onclick="showAnswer(${index})"]`);
-            
-            if (showBtn.textContent.includes('Show Answer')) {
-                // Show the answer
-                input.value = flashcards[index].english;
-                result.innerHTML = `💡 Answer: <strong>${flashcards[index].english}</strong> - ${flashcards[index].translation}`;
-                result.className = 'quiz-result';
-                result.style.background = '#e6fffa';
-                result.style.color = '#234e52';
-                input.style.borderColor = '#4dd0e1';
-                input.style.color = '#4dd0e1';
-                input.style.fontWeight = 'bold';
-                
-                // Change button text to "Clear"
-                showBtn.innerHTML = '🗑️ Clear';
-                showBtn.style.background = 'linear-gradient(45deg, #718096, #a0aec0)';
-            } else {
-                // Clear the answer
-                input.value = '';
-                result.innerHTML = '';
-                result.className = 'quiz-result';
-                result.style.background = '';
-                result.style.color = '';
-                input.style.borderColor = '#e2e8f0';
-                input.style.color = '#333';
-                input.style.fontWeight = 'normal';
-                
-                // Change button text back to "Show Answer"
-                showBtn.innerHTML = '❌ Show Answer';
-                showBtn.style.background = 'linear-gradient(45deg, #f56565, #fc8181)';
-            }
+        function loadLesson() {
+            const selectedCategory = categorySelect.value;
+            const selectedLesson = lessonSelect.value;
+            currentFlashcards = [...wordSets[selectedCategory][selectedLesson]];
+            renderUI();
         }
-
-        function playAudio(event, word) {
-            event.stopPropagation();
-            
-            if ('speechSynthesis' in window) {
+        
+        function playAudio(word) {
+             if ('speechSynthesis' in window) {
+                speechSynthesis.cancel();
                 const utterance = new SpeechSynthesisUtterance(word);
                 utterance.lang = currentVoice === 'british' ? 'en-GB' : 'en-US';
                 utterance.rate = 0.8;
                 utterance.pitch = 1;
                 speechSynthesis.speak(utterance);
+             } else {
+                 showToast('Browser does not support speech synthesis');
+             }
+        }
+        
+        window.toggleQuizMode = function() {
+            isQuizMode = !isQuizMode;
+            document.querySelector('.quiz-btn').classList.toggle('active', isQuizMode);
+            renderUI();
+        }
+
+        window.checkAnswer = function(index) {
+            const input = document.querySelector(`input[data-index="${index}"]`);
+            const result = document.getElementById(`result-${index}`);
+            if (input.value.toLowerCase().trim() === input.dataset.answer) {
+                result.textContent = '✅ Correct! Well done!'; result.className = 'quiz-result correct';
             } else {
-                alert('Browser does not support speech synthesis');
+                result.innerHTML = `❌ Incorrect. The answer is: <strong>${currentFlashcards[index].english}</strong>`;
+                result.className = 'quiz-result incorrect';
             }
         }
 
-        function filterCards(category) {
-            document.querySelectorAll('.controls .btn:not(.quiz-btn)').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            currentFilter = category;
-            
-            document.querySelectorAll('.card').forEach(card => {
-                if (category === 'all') {
-                    card.classList.remove('hidden');
-                } else {
-                    if (card.getAttribute('data-category') === category) {
-                        card.classList.remove('hidden');
-                    } else {
-                        card.classList.add('hidden');
-                    }
-                }
-            });
-            
-            updateStats();
+        window.showAnswer = function(index) {
+             document.getElementById(`result-${index}`).innerHTML = `💡 Answer: <strong>${currentFlashcards[index].english}</strong>`;
         }
-
-        function flipAllCards() {
+        
+        window.flipAllCards = function() {
             if (isQuizMode) return;
-            document.querySelectorAll('.card:not(.hidden)').forEach(card => {
-                card.classList.toggle('flipped');
-            });
+            document.querySelectorAll('.card:not(.hidden)').forEach(card => card.classList.toggle('flipped'));
         }
 
-        function togglePlayAll() {
-            if (isPlayingAll) {
-                stopPlayAll();
-            } else {
-                playAllCards();
-            }
-        }
-
+        window.togglePlayAll = function() { isPlayingAll ? stopPlayAll() : playAllCards(); }
+        
         function stopPlayAll() {
             isPlayingAll = false;
-            speechSynthesis.cancel(); // Stop current speech
-            
-            const playBtn = document.getElementById('playAllBtn');
-            playBtn.innerHTML = '🎵 Play All Words';
-            playBtn.className = 'play-all-btn';
-            
-            // Reset card scales
+            speechSynthesis.cancel();
+            document.getElementById('playAllBtn').classList.remove('stop-btn');
             document.querySelectorAll('.card').forEach(c => c.style.transform = '');
         }
 
         function playAllCards() {
-            if (isPlayingAll) return;
-            
             isPlayingAll = true;
-            const playBtn = document.getElementById('playAllBtn');
-            playBtn.innerHTML = '⏸️ Stop Playing';
-            playBtn.className = 'play-all-btn stop-btn';
-            
-            const visibleCards = flashcards.filter((card, index) => {
-                const cardElement = document.getElementById(`card-${index}`);
-                return !cardElement.classList.contains('hidden');
-            });
-            
+            document.getElementById('playAllBtn').classList.add('stop-btn');
+            const visibleCards = Array.from(document.querySelectorAll('.card:not(.hidden)'));
             let currentIndex = 0;
             
             function playNext() {
-                if (currentIndex >= visibleCards.length || !isPlayingAll) {
-                    stopPlayAll();
-                    return;
-                }
+                if (currentIndex >= visibleCards.length || !isPlayingAll) return stopPlayAll();
+                const cardElement = visibleCards[currentIndex];
+                const word = cardElement.querySelector('.audio-btn').dataset.word;
+
+                document.querySelectorAll('.card').forEach(c => c.style.transform = '');
+                cardElement.style.transform = 'scale(1.05)';
+                cardElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 
-                const card = visibleCards[currentIndex];
-                const utterance = new SpeechSynthesisUtterance(card.english);
+                const utterance = new SpeechSynthesisUtterance(word);
                 utterance.lang = currentVoice === 'british' ? 'en-GB' : 'en-US';
                 utterance.rate = 0.7;
-                utterance.pitch = 1;
-                
-                utterance.onend = function() {
-                    if (isPlayingAll) {
-                        currentIndex++;
-                        setTimeout(playNext, 1500); // Wait 1.5 seconds between words
-                    }
-                };
-                
-                utterance.onerror = function() {
-                    if (isPlayingAll) {
-                        currentIndex++;
-                        setTimeout(playNext, 1000);
-                    }
-                };
-                
+                utterance.onend = () => { if (isPlayingAll) setTimeout(playNext, 1200); };
                 speechSynthesis.speak(utterance);
-                
-                // Highlight current card
-                document.querySelectorAll('.card').forEach(c => c.style.transform = '');
-                const cardElement = document.getElementById(`card-${flashcards.indexOf(card)}`);
-                if (cardElement && !cardElement.classList.contains('hidden')) {
-                    cardElement.style.transform = 'scale(1.05)';
-                    cardElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
+                currentIndex++;
             }
-            
-            if ('speechSynthesis' in window) {
-                playNext();
-            } else {
-                alert('Browser does not support speech synthesis');
-                stopPlayAll();
-            }
+            playNext();
+        }
+
+        window.setVoice = function(voice) {
+             currentVoice = voice;
+             document.querySelectorAll('.voice-btn').forEach(btn => btn.classList.remove('active'));
+             document.getElementById(voice === 'american' ? 'americanBtn' : 'britishBtn').classList.add('active');
         }
 
         function updateStats() {
-            const total = flashcards.length;
-            let visibleCount = 0;
-            
-            if (currentFilter === 'all') {
-                visibleCount = total;
-            } else {
-                visibleCount = flashcards.filter(card => card.category === currentFilter).length;
-            }
-            
-            const stats = {
-                classroom: flashcards.filter(card => card.category === 'classroom').length,
-                colors: flashcards.filter(card => card.category === 'colors').length,
-                shapes: flashcards.filter(card => card.category === 'shapes').length,
-                verbs: flashcards.filter(card => card.category === 'verbs').length,
-                nouns: flashcards.filter(card => card.category === 'nouns').length
-            };
-            
-            document.getElementById('stats').textContent = 
-                `Total: ${total} | Classroom: ${stats.classroom} | Colors: ${stats.colors} | Shapes: ${stats.shapes} | Verbs: ${stats.verbs} | Nouns: ${stats.nouns} | Showing: ${visibleCount}`;
+            const total = currentFlashcards.length;
+            document.getElementById('stats').textContent = `Lesson Total: ${total}`;
         }
 
-        // Keyboard shortcuts
-        document.addEventListener('keydown', function(event) {
-            if (isQuizMode) return;
-            
-            switch(event.code) {
-                case 'KeyF':
-                    flipAllCards();
-                    break;
-                case 'KeyP':
-                    togglePlayAll();
-                    break;
-                case 'KeyQ':
-                    toggleQuizMode();
-                    break;
-                case 'Space':
-                    event.preventDefault();
-                    togglePlayAll();
-                    break;
-            }
-        });
-
-        // Allow Enter key to check answers in quiz mode
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Enter' && isQuizMode) {
-                const activeInput = document.activeElement;
-                if (activeInput.classList.contains('quiz-input')) {
-                    const index = parseInt(activeInput.dataset.index);
-                    checkAnswer(index);
-                }
-            }
-        });
-
-        // Scroll to top functionality
-        function scrollToTop() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
-        // Show/hide scroll to top button based on scroll position
-        window.addEventListener('scroll', function() {
-            const scrollToTopBtn = document.getElementById('scrollToTopBtn');
-            if (window.pageYOffset > 300) {
-                scrollToTopBtn.classList.add('visible');
-            } else {
-                scrollToTopBtn.classList.remove('visible');
-            }
-        });
+        // Initialize App
+        initializeAppUI();
 
-        // Initialize
-        createCards();
-        updateStats();
     </script>
 </body>
 </html>
+

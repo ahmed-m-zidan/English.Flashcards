@@ -53,6 +53,15 @@
             font-size: 1.2rem;
             opacity: 0.9;
         }
+        
+        /* New Style for main controls container to match card area width */
+        #mainControlsContainer {
+            max-width: 1200px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
         .controls {
             display: flex;
@@ -61,6 +70,7 @@
             flex-wrap: wrap;
             justify-content: center;
             max-width: 1200px;
+            width: 100%; /* Ensure controls utilize available width */
         }
         
         .select-group {
@@ -402,8 +412,8 @@
         }
 
         .results-section.incorrect h3 {
-             border-bottom: 2px solid var(--incorrect-start);
-             color: var(--incorrect-start);
+            border-bottom: 2px solid var(--incorrect-start);
+            color: var(--incorrect-start);
         }
 
         .results-section.correct h3 {
@@ -434,9 +444,37 @@
 
 
         @media (max-width: 768px) {
+            /* General Mobile adjustments */
             .cards-container { grid-template-columns: 1fr; gap: 15px; }
-            .card { height: 280px; } .header h1 { font-size: 2rem; } .word-english { font-size: 1.8rem; }
-            .word-translation { font-size: 1.3rem; } .controls { gap: 8px; } .btn { padding: 8px 14px; font-size: 0.8rem; }
+            .card { height: 280px; } 
+            .header h1 { font-size: 2rem; } 
+            .word-english { font-size: 1.8rem; }
+            .word-translation { font-size: 1.3rem; } 
+            .controls { 
+                gap: 8px; 
+                padding: 0 5px; /* Added padding for controls to breathe */
+                width: 100%;
+            } 
+            .btn { padding: 8px 14px; font-size: 0.8rem; }
+            
+            /* Enhanced Select Group Responsiveness */
+            .select-group {
+                flex-direction: column; /* Stack dropdowns and labels vertically on mobile */
+                width: 90%;
+                margin: 0 auto;
+                padding: 15px; 
+                align-items: stretch; /* Stretch to make full width use */
+            }
+            .select-group label {
+                padding: 5px 0 0 10px !important; /* Adjust label spacing */
+                text-align: left; /* Align labels left */
+            }
+            .select-group select {
+                font-size: 1rem;
+                padding: 10px;
+            }
+
+            /* Quiz Mode Mobile Fixes */
             .quiz-item { grid-template-columns: 1fr; text-align: center;}
             .quiz-item-emoji { grid-row: 1; margin: 0 auto; }
             .quiz-item-word { justify-content: center; }
@@ -504,10 +542,10 @@
                     { english: "orange", translation: "برتقالي", type: "adjective", emoji: "🧡" },
                 ],
                 "Shapes": [
-                     { english: "shapes", translation: "أشكال", type: "noun", emoji: "🔷" },
-                     { english: "triangle", translation: "مثلث", type: "noun", emoji: "🔺" },
-                     { english: "square", translation: "مربع", type: "noun", emoji: "⬜" },
-                     { english: "circle", translation: "دائرة", type: "noun", emoji: "⭕" },
+                    { english: "shapes", translation: "أشكال", type: "noun", emoji: "🔷" },
+                    { english: "triangle", translation: "مثلث", type: "noun", emoji: "🔺" },
+                    { english: "square", translation: "مربع", type: "noun", emoji: "⬜" },
+                    { english: "circle", translation: "دائرة", type: "noun", emoji: "⭕" },
                 ],
                 "Action Verbs": [
                     { english: "kick", translation: "يركل", type: "verb", emoji: "🦵" },
@@ -546,6 +584,80 @@
                     { english: "a felt tip", translation: "قلم فلوماستر", type: "noun", emoji: "🖊️", isNew: true },
                     { english: "scissors", translation: "مقص", type: "noun", emoji: "✂️", isNew: true },
                     { english: "a paintbrush", translation: "فرشاة رسم", type: "noun", emoji: "🖌️", isNew: true }
+                ],
+                "Unit 2 – The World of Weather": [
+                    { english: "a raincoat", translation: "معطف واقٍ من المطر", type: "noun", emoji: "🧥", isNew: true },
+                    { english: "a swimming costume", translation: "ملابس السباحة", type: "noun", emoji: "🏊", isNew: true },
+                    { english: "a jumper", translation: "سترة صوفية (بلوفر)", type: "noun", emoji: "🧶", isNew: true },
+                    { english: "boots", translation: "أحذية طويلة تُغطي القدم والساق", type: "noun", emoji: "👢", isNew: true },
+                    { english: "gloves", translation: "قفازات", type: "noun", emoji: "🧤", isNew: true },
+                    { english: "a hat", translation: "قبعة", type: "noun", emoji: "🧢", isNew: true },
+                    { english: "a jacket", translation: "جاكيت (معطف قصير)", type: "noun", emoji: "🧥", isNew: true },
+                    { english: "trousers", translation: "بنطال", type: "noun", emoji: "👖", isNew: true },
+                    { english: "cloudy", translation: "غائم", type: "adjective", emoji: "☁️", isNew: true },
+                    { english: "rainy", translation: "ممطر", type: "adjective", emoji: "🌧️", isNew: true },
+                    { english: "hot", translation: "حار", type: "adjective", emoji: "🔥", isNew: true },
+                    { english: "sunny", translation: "مشمس", type: "adjective", emoji: "☀️", isNew: true },
+                    { english: "windy", translation: "عاصف / به رياح", type: "adjective", emoji: "🌬️", isNew: true },
+                    { english: "cold", translation: "بارد", type: "adjective", emoji: "🥶", isNew: true },
+                    { english: "snowy", translation: "مثلج", type: "adjective", emoji: "❄️", isNew: true },
+                    { english: "shorts", translation: "شورت / سروال قصير", type: "noun", emoji: "🩳", isNew: true },
+                    { english: "trainers", translation: "أحذية رياضية", type: "noun", emoji: "👟", isNew: true },
+                    { english: "umbrella", translation: "مظلة / شمسية", type: "noun", emoji: "☔", isNew: true },
+                    { english: "jeans", translation: "بنطال جينز", type: "noun", emoji: "👖", isNew: true },
+                    { english: "a coat", translation: "معطف", type: "noun", emoji: "🧥", isNew: true }
+                ],
+                "Unit 3 – Fun in the Sun": [
+                    { english: "skip", translation: "يقفز بخفة وسرعة", type: "verb", emoji: "🤸", isNew: true },
+                    { english: "play basketball", translation: "يلعب كرة السلة", type: "verb", emoji: "🏀", isNew: true },
+                    { english: "play a game", translation: "يلعب لعبة", type: "verb", emoji: "🎲", isNew: true },
+                    { english: "ride a bike", translation: "يركب دراجة", type: "verb", emoji: "🚴", isNew: true },
+                    { english: "rollerblade", translation: "يتزلج على أحذية بعجلات", type: "verb", emoji: "🛼", isNew: true },
+                    { english: "play football", translation: "يلعب كرة القدم", type: "verb", emoji: "⚽", isNew: true },
+                    { english: "play baseball", translation: "يلعب البيسبول", type: "verb", emoji: "⚾", isNew: true },
+                    { english: "skateboard", translation: "يتزلج على لوح ذي عجلات", type: "verb", emoji: "🛹", isNew: true },
+                    { english: "play hide and seek", translation: "يلعب الغميضة", type: "verb", emoji: "🙈", isNew: true },
+                    { english: "fly a kite", translation: "يطير طائرة ورقية", type: "verb", emoji: "🪁", isNew: true },
+                    { english: "bounce a ball", translation: "يُرتد الكرة", type: "verb", emoji: "⛹️", isNew: true },
+                    { english: "throw a ball", translation: "يرمي الكرة", type: "verb", emoji: "🥎", isNew: true },
+                    { english: "catch a ball", translation: "يمسك الكرة", type: "verb", emoji: "🧤", isNew: true },
+                    { english: "watch a game", translation: "يشاهد مباراة", type: "verb", emoji: "📺", isNew: true },
+                    { english: "play tag", translation: "يلعب التطويش", type: "verb", emoji: "🏃", isNew: true }
+                ],
+                "Unit 4 – Inside Our House": [
+                    { english: "a fireplace", translation: "مدفأة", type: "noun", emoji: "🔥", isNew: true },
+                    { english: "a bookcase", translation: "خزانة كتب", type: "noun", emoji: "📚", isNew: true },
+                    { english: "an armchair", translation: "مقعد مريح بذراعين", type: "noun", emoji: "🪑", isNew: true },
+                    { english: "stairs", translation: "سُلّم (درجات)", type: "noun", emoji: "🪜", isNew: true },
+                    { english: "shelves", translation: "رفوف", type: "noun", emoji: "🖼️", isNew: true },
+                    { english: "a rug", translation: "سجادة صغيرة", type: "noun", emoji: "🧶", isNew: true },
+                    { english: "a shower", translation: "دش", type: "noun", emoji: "🚿", isNew: true },
+                    { english: "a bath", translation: "حوض استحمام", type: "noun", emoji: "🛁", isNew: true },
+                    { english: "a microwave", translation: "ميكروويف", type: "noun", emoji: "♨️", isNew: true },
+                    { english: "a cooker", translation: "موقد/فرن", type: "noun", emoji: "🍳", isNew: true },
+                    { english: "a fridge", translation: "ثلاجة", type: "noun", emoji: "🧊", isNew: true },
+                    { english: "a window", translation: "نافذة", type: "noun", emoji: "🪟", isNew: true },
+                    { english: "a sink", translation: "حوض غسل", type: "noun", emoji: "🚰", isNew: true },
+                    { english: "a phone", translation: "هاتف", type: "noun", emoji: "📱", isNew: true },
+                    { english: "a door", translation: "باب", type: "noun", emoji: "🚪", isNew: true }
+                ],
+                "Unit 5 – Day by Day": [
+                    { english: "get up", translation: "ينهض من السرير", type: "verb", emoji: "🌅", isNew: true },
+                    { english: "wash my face", translation: "أغسل وجهي", type: "verb", emoji: "💧", isNew: true },
+                    { english: "brush my teeth", translation: "أنظف أسناني", type: "verb", emoji: "🦷", isNew: true },
+                    { english: "get dressed", translation: "أرتدي ملابسي", type: "verb", emoji: "👚", isNew: true },
+                    { english: "have breakfast", translation: "أتناول وجبة الإفطار", type: "verb", emoji: "🧇", isNew: true },
+                    { english: "go to school", translation: "أذهب إلى المدرسة", type: "verb", emoji: "🎒", isNew: true },
+                    { english: "have lunch", translation: "أتناول الغداء", type: "verb", emoji: "🥪", isNew: true },
+                    { english: "play with friends", translation: "ألعب مع الأصدقاء", type: "verb", emoji: "🤝", isNew: true },
+                    { english: "play computer games", translation: "ألعب ألعاب الكمبيوتر", type: "verb", emoji: "🎮", isNew: true },
+                    { english: "have dinner", translation: "أتناول العشاء", type: "verb", emoji: "🍲", isNew: true },
+                    { english: "go to bed", translation: "أذهب إلى السرير", type: "verb", emoji: "🛌", isNew: true },
+                    { english: "in the morning", translation: "في الصباح", type: "time", emoji: "🌤️", isNew: true },
+                    { english: "late", translation: "متأخر", type: "adjective", emoji: "⏳", isNew: true },
+                    { english: "in the afternoon", translation: "في فترة بعد الظهر", type: "time", emoji: "☀️", isNew: true },
+                    { english: "in the evening", translation: "في المساء", type: "time", emoji: "🌆", isNew: true },
+                    { english: "at night", translation: "في الليل", type: "time", emoji: "🌃", isNew: true }
                 ]
             }
         };
@@ -604,27 +716,27 @@
         }
         
         function createQuizCards() {
-             const container = document.getElementById('cardsContainer');
-             container.innerHTML = '';
-             currentFlashcards.forEach((card, index) => {
-                 const cardElement = document.createElement('div');
-                 cardElement.className = 'card';
-                 cardElement.id = `card-${card.english.replace(/\s+/g, '-')}`;
-                 cardElement.innerHTML = `
-                     <div class="card-face quiz-face">
-                         <div class="card-number">${index + 1}</div>
-                         <div class="card-image">${card.emoji}</div>
-                         <button class="audio-btn" data-word="${card.english}" style="margin-bottom: 15px;">🔊 Listen</button>
-                         <input type="text" class="quiz-input" placeholder="Type the English word..." data-answer="${card.english.toLowerCase()}" data-index="${index}" dir="ltr">
-                         <div class="quiz-buttons">
+            const container = document.getElementById('cardsContainer');
+            container.innerHTML = '';
+            currentFlashcards.forEach((card, index) => {
+                const cardElement = document.createElement('div');
+                cardElement.className = 'card';
+                cardElement.id = `card-${card.english.replace(/\s+/g, '-')}`;
+                cardElement.innerHTML = `
+                    <div class="card-face quiz-face">
+                        <div class="card-number">${index + 1}</div>
+                        <div class="card-image">${card.emoji}</div>
+                        <button class="audio-btn" data-word="${card.english}" style="margin-bottom: 15px;">🔊 Listen</button>
+                        <input type="text" class="quiz-input" placeholder="Type the English word..." data-answer="${card.english.toLowerCase()}" data-index="${index}" dir="ltr">
+                        <div class="quiz-buttons">
                             <button class="check-btn" data-index="${index}">✓ Check</button>
                             <button class="wrong-btn" data-index="${index}">❌ Show Answer</button>
-                         </div>
-                         <div class="quiz-result" id="result-${index}"></div>
-                     </div>
-                 `;
-                 container.appendChild(cardElement);
-             });
+                        </div>
+                        <div class="quiz-result" id="result-${index}"></div>
+                    </div>
+                `;
+                container.appendChild(cardElement);
+            });
         }
         
         // --- Event Handling & UI Logic ---
@@ -682,16 +794,16 @@
         }
         
         function playAudio(word) {
-             if ('speechSynthesis' in window) {
+            if ('speechSynthesis' in window) {
                 speechSynthesis.cancel();
                 const utterance = new SpeechSynthesisUtterance(word);
                 utterance.lang = currentVoice === 'british' ? 'en-GB' : 'en-US';
                 utterance.rate = 0.8;
                 utterance.pitch = 1;
                 speechSynthesis.speak(utterance);
-             } else {
-                 showToast('Browser does not support speech synthesis');
-             }
+            } else {
+                showToast('Browser does not support speech synthesis');
+            }
         }
         
         window.toggleQuizMode = function() {
@@ -712,7 +824,7 @@
         }
 
         window.showAnswer = function(index) {
-             document.getElementById(`result-${index}`).innerHTML = `💡 Answer: <strong>${currentFlashcards[index].english}</strong>`;
+            document.getElementById(`result-${index}`).innerHTML = `💡 Answer: <strong>${currentFlashcards[index].english}</strong>`;
         }
         
         window.flipAllCards = function() {
@@ -755,9 +867,9 @@
         }
 
         window.setVoice = function(voice) {
-             currentVoice = voice;
-             document.querySelectorAll('.voice-btn').forEach(btn => btn.classList.remove('active'));
-             document.getElementById(voice === 'american' ? 'americanBtn' : 'britishBtn').classList.add('active');
+            currentVoice = voice;
+            document.querySelectorAll('.voice-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(voice === 'american' ? 'americanBtn' : 'britishBtn').classList.add('active');
         }
 
         function updateStats() {
@@ -815,8 +927,8 @@
                         <div class="quiz-item-emoji">${card.emoji}</div>
                         <div class="quiz-item-word">${wordWithBlanksHTML}</div>
                         <div class="letter-choices">
-                             ${choices.map(choice => `<button class="letter-btn">${choice}</button>`).join('')}
-                             <button class="clear-selection-btn">♻️</button>
+                            ${choices.map(choice => `<button class="letter-btn">${choice}</button>`).join('')}
+                            <button class="clear-selection-btn">♻️</button>
                         </div>
                     </div>
                 `;
@@ -841,8 +953,8 @@
             });
 
             if (letterIndices.length < 2) {
-                 const html = chars.map(char => `<span>${char}</span>`).join('');
-                 return { wordWithBlanksHTML: html, missingLetters: [] };
+                const html = chars.map(char => `<span>${char}</span>`).join('');
+                return { wordWithBlanksHTML: html, missingLetters: [] };
             }
 
             const missingLetters = [];
@@ -870,7 +982,7 @@
         }
 
         function generateLetterChoices(missingLetters) {
-            const choices = new Set(missingLetters);
+            const choices = new Set(missingLetters.map(l => l.toLowerCase()));
             const alphabet = 'abcdefghijklmnopqrstuvwxyz';
             while (choices.size < 5) {
                 const randomChar = alphabet[Math.floor(Math.random() * alphabet.length)];
@@ -887,17 +999,21 @@
             const incorrectAnswers = [];
 
             quizItems.forEach((item, index) => {
-                const correctLetters = item.dataset.correctLetters;
-                const selectedLetters = Array.from(item.querySelectorAll('.letter-placeholder')).map(box => box.textContent).sort().join('');
+                const correctLetters = item.dataset.correctLetters.toLowerCase().split('').sort().join('');
+                const selectedLetters = Array.from(item.querySelectorAll('.letter-placeholder')).map(box => box.textContent.toLowerCase()).sort().join('');
                 const originalCard = currentFlashcards[index];
                 
                 if (selectedLetters === correctLetters) {
                     score++;
                     correctAnswers.push(originalCard.english);
                 } else {
+                    // Reconstruct the user's attempt on the missing letters for display
+                    const userAttempt = Array.from(item.querySelectorAll('.letter-placeholder')).map(box => box.textContent || ' ').join('');
+                    
                     incorrectAnswers.push({
                         word: originalCard.english,
-                        userAnswer: Array.from(item.querySelectorAll('.letter-placeholder')).map(box => box.textContent || '_').join('')
+                        // Show the reconstructed user answer based on the length of the blanks (which is always 2)
+                        userAnswer: userAttempt
                     });
                 }
             });
@@ -968,4 +1084,3 @@
     </script>
 </body>
 </html>
-
